@@ -75,10 +75,10 @@ function validateDate($date) {
 @return string|null - результат проверки
  */
 function validateProject($postProjectId, $projects) {
-    $res = NULL;
+    $res = 'Выбранный проект не существует';
     foreach ($projects as $project) {
-        if ($postProjectId !== $project['id']) {
-            $res = 'Error';
+        if ($postProjectId === $project['id']) {
+            $res = NULL;
             break;
         }
     }

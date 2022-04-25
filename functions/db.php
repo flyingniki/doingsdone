@@ -6,6 +6,7 @@
 */
 function dbConnect($config) {
     $conn = mysqli_connect($config['host'], $config['user'], $config['password'], $config['database']);
+    mysqli_options($conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
     if ($conn === false) {
         print("Ошибка подключения: " . mysqli_connect_error());
     }
