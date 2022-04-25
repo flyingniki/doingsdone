@@ -12,17 +12,6 @@ function getDataFromTaskForm($post) {
     return $result;
 }
 
-/** Безопасная обработка полученных данных
-@param array $formData - данные из формы
-@return array - результат обработки
-*/
-function formDataHandler(array $formData) {
-    foreach ($formData as $key => $value) {
-        $formData[$key] = trim(htmlspecialchars(stripslashes($formData[$key])));
-    }
-    return $formData;
-}
-
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -118,59 +107,39 @@ function validateFile($file) {
 }
 
 /** Проверка формы на ошибки
-@param array $postData - данные из формы
+@param array $data - данные из формы
 @param array $file - прикрепленный файл
 @param array $projects - список проектов
 @return array - массив с ошибками
 */
-function validateTaskForm($postData, $file, $projects) {
+function validateTaskForm($data, $file, $projects) {
     $result = [];
-    $result['name'] = $postData['name'] ?? NULL;
-    $result['project_id'] = (int)$postData['project_id'];
-    $result['date'] = $postData['date'] ?? NULL;
-    echo 'Данные из формы: ';
-    print_r($postData);
+    $result['name'] = $data['name'] ?? NULL;
+    $result['project_id'] = (int)$data['project_id'] ?? NULL;
+    $result['date'] = $data['date'] ?? NULL;
+    $result['file'] = $file ?? NULL;
+    //echo 'Данные из формы: ';
+    //print_r($data);
     $errors = [];
     $rules = [
         'name' => validateTaskName($result['name']),
         'project_id' => validateProject($result['project_id'], $projects),
-        'date' => validateDate($result['date']),
-        'file' => validateFile($file)
+        'date' => !empty($result['date']) ? validateDate($result['date']) : NULL,
+        'file' => validateFile($result['file'])
     ];
-    echo 'Правила проверки: ';
-    print_r($rules);
-    foreach ($postData as $key => $value) {
+    //echo 'Правила проверки: ';
+    //print_r($rules);
+    foreach ($data as $key => $value) {
         if (isset($rules[$key])) {
             $errors[$key] = $rules[$key];
         }
     }
-    echo 'Ошибки: ';
-    print_r($errors);
+    if (isset($rules['file'])) {
+        $errors['file'] = $rules['file'];
+    }
+    //echo 'Ошибки: ';
+    //print_r($errors);
     return $errors;
-}
-
-/** Сохраняет задачу в БД
-@param mysqli $conn - ресурс соединения с БД
-@param array $data - данные из формы
-@param array $file - загруженный файл
-@param int $userId - id пользователя
-@return mysqli_result|false - результат запроса
-*/
-function setTask($conn, $data, $file, $userId = 1) {
-    $sql = "INSERT INTO tasks (`title`, `file`, `date_final`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?)";
-    $stmt = mysqli_prepare($conn, $sql);
-        if ($stmt === false) {
-            $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($conn);
-            die($errorMsg);
-        }
-        if (mysqli_errno($conn) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($conn);
-            die($errorMsg);
-        }
-    mysqli_stmt_bind_param($stmt, 'sssii', $data['name'], $file['name'], $data['date'], $userId, $data['project_id']);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    return $result;
 }
 
 /** Перемещает загрженный файл из временной директории в папку /uploads/

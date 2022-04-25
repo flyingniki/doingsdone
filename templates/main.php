@@ -62,7 +62,7 @@
                         </td>
 
                         <td class="task__file">
-                            <a class="download-link" href="#"><?= $task['file'] ?></a>
+                            <a class="download-link" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                         </td>
 
                         <td class="task__date"><?= $task['date_final'] ?></td>
@@ -79,7 +79,7 @@
                         </td>
 
                         <td class="task__file">
-                            <a class="download-link" href="#"><?= $task['file'] ?></a>
+                            <a class="download-link" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                         </td>
 
                         <td class="task__date"><?= $task['date_final'] ?></td>
@@ -99,7 +99,7 @@
                 </td>
 
                 <td class="task__file">
-                    <a class="download-link" href="#"><?= $task['file'] ?></a>
+                    <a class="download-link" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                 </td>
 
                 <td class="task__date"><?= $task['date_final'] ?></td>

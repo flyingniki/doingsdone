@@ -66,3 +66,28 @@ function checkExist($conn, $project_id) {
         return false;
     endif;
 }
+
+/** Сохраняет задачу в БД
+@param mysqli $conn - ресурс соединения с БД
+@param array $data - данные из формы
+@param array $file - загруженный файл
+@param int $userId - id пользователя
+@return mysqli_result|false - результат запроса
+*/
+function setTask($conn, $data, $file, $userId = 1) {
+    if (!empty($data['date'])) {
+        $sql = "INSERT INTO tasks (`title`, `file`, `date_final`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'sssii', $data['name'], $file['name'], $data['date'], $userId, $data['project_id']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+    }
+    else {
+        $sql = "INSERT INTO tasks (`title`, `file`, `user_id`, `project_id`) VALUES (?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'ssii', $data['name'], $file['name'], $userId, $data['project_id']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+    }
+    return $result;
+}

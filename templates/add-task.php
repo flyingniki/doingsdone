@@ -22,31 +22,35 @@
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input" type="text" name="name" id="name" value="<?= isset($_POST['name']) ? $_POST['name'] : '' ?>" placeholder="Введите название">
+            <input class="form__input <?= $class['name'] ?? '' ?>" type="text" name="name" id="name" value="" placeholder="Введите название">
+            <p class="form__message"><?= $errors['name'] ?? '' ?></p>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="project">Проект <sup>*</sup></label>
 
-            <select class="form__input form__input--select" name="project_id" id="project">
+            <select class="form__input form__input--select <?= $class['project_id'] ?? '' ?>" name="project_id" id="project">
                 <?foreach ($projects as $project):?>
                     <option value="<?= $project['id'] ?>"><?= $project['title'] ?></option>
                 <?endforeach;?>
             </select>
+            <p class="form__message"><?= $errors['project_id'] ?? '' ?></p>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="date">Дата выполнения</label>
 
-            <input class="form__input form__input--date" type="text" name="date" id="date" value="<?= isset($_POST['date']) ? $_POST['date'] : '' ?>"
+            <input class="form__input form__input--date <?= $class['date'] ?? '' ?>" type="text" name="date" id="date" value=""
                 placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+            <p class="form__message"><?= $errors['date'] ?? '' ?></p>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="file">Файл</label>
 
             <div class="form__input-file">
-                <input class="visually-hidden" type="file" name="file" id="file" value="<?= $file['name'] ?>">
+                <input class="visually-hidden <?= $class['file'] ?? '' ?>" type="file" name="file" id="file" value="">
+                <p class="form__message"><?= $errors['file'] ?? '' ?></p>
 
                 <label class="button button--transparent" for="file">
                     <span>Выберите файл</span>
