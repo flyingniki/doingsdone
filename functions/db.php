@@ -46,9 +46,9 @@ function getProjects(mysqli $conn) {
 @return array - ответ запроса в виде двумерного массива
 */
 function getTasks(mysqli $conn, ?int $project_id = NULL): array {
-    $sql = 'SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t';
+    $sql = 'SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t ORDER BY date_add DESC';
     if (isset($project_id)) {
-        $sql .= " WHERE t.project_id = {$project_id}";
+        $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.project_id = {$project_id} ORDER BY date_add DESC";
     }
     return dbQuery($conn, $sql);
 }
@@ -67,6 +67,60 @@ function checkExist($conn, $project_id) {
     endif;
 }
 
+/**
+ * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return mysqli_stmt Подготовленное выражение
+ */
+function db_get_prepare_stmt($link, $sql, $data = []) {
+    $stmt = mysqli_prepare($link, $sql);
+
+    if ($stmt === false) {
+        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        die($errorMsg);
+    }
+
+    if ($data) {
+        $types = '';
+        $stmt_data = [];
+
+        foreach ($data as $value) {
+            $type = 's';
+
+            if (is_int($value)) {
+                $type = 'i';
+            }
+            else if (is_string($value)) {
+                $type = 's';
+            }
+            else if (is_double($value)) {
+                $type = 'd';
+            }
+
+            if ($type) {
+                $types .= $type;
+                $stmt_data[] = $value;
+            }
+        }
+
+        $values = array_merge([$stmt, $types], $stmt_data);
+
+        $func = 'mysqli_stmt_bind_param';
+        $func(...$values);
+
+        if (mysqli_errno($link) > 0) {
+            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            die($errorMsg);
+        }
+    }
+
+    return $stmt;
+}
+
 /** Сохраняет задачу в БД
 @param mysqli $conn - ресурс соединения с БД
 @param array $data - данные из формы
@@ -74,20 +128,19 @@ function checkExist($conn, $project_id) {
 @param int $userId - id пользователя
 @return mysqli_result|false - результат запроса
 */
-function setTask($conn, $data, $file, $userId = 1) {
-    if (!empty($data['date'])) {
-        $sql = "INSERT INTO tasks (`title`, `file`, `date_final`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'sssii', $data['name'], $file['name'], $data['date'], $userId, $data['project_id']);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-    }
-    else {
-        $sql = "INSERT INTO tasks (`title`, `file`, `user_id`, `project_id`) VALUES (?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'ssii', $data['name'], $file['name'], $userId, $data['project_id']);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-    }
+function addTask($conn, $data, $file, $userId = 1) {
+    $dataArray = [
+        date('Y-m-d H-i-s'),
+        $data['name'],
+        $file['name'],
+        $data['date'],
+        $userId,
+        $data['project_id']
+    ];
+
+    $sql = "INSERT INTO tasks (`date_add`, `title`, `file`, `date_final`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($conn, $sql, $dataArray);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     return $result;
 }

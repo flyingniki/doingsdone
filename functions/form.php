@@ -1,17 +1,5 @@
 <?php
 
-/** Получает данные из POST и приводит их к нужному типу
-@param array $post - данные из массива $_POST
-@return array - возвращаемый массив
-*/
-function getDataFromTaskForm($post) {
-    $result = [];
-    $result['name'] = $post['name'] ?? NULL;
-    $result['project_id'] = (int)$post['project_id'] ?? NULL;
-    $result['date'] = $post['date'] ?? NULL;
-    return $result;
-}
-
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -90,11 +78,11 @@ function validateTaskName($taskName) {
 @return string|null - результат проверки
 */
 function validateFile($file) {
-    if (isset($file)) {
-        $file_name = $file['tmp_name'];
+    if (!empty($file['name'])) {
+        $file_tmp_name = $file['tmp_name'];
         $file_size = $file['size'];
 
-        $file_type = !empty($file_name) ? mime_content_type($file_name) : NULL;
+        $file_type = mime_content_type($file_tmp_name);
 
         if (isset($file_type) && $file_type !== 'application/pdf') {
             return 'Загрузите файл в формате PDF';
@@ -114,29 +102,19 @@ function validateFile($file) {
 */
 function validateTaskForm($data, $file, $projects) {
     $result = [];
-    $result['name'] = $data['name'] ?? NULL;
-    $result['project_id'] = (int)$data['project_id'] ?? NULL;
-    $result['date'] = $data['date'] ?? NULL;
+    $result['name'] = filter_input(INPUT_POST, 'name');
+    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT);
+    $result['date'] = filter_input(INPUT_POST, 'date');
     $result['file'] = $file ?? NULL;
     //echo 'Данные из формы: ';
-    //print_r($data);
-    $errors = [];
-    $rules = [
+    //print_r($result);
+    $errors = [
         'name' => validateTaskName($result['name']),
         'project_id' => validateProject($result['project_id'], $projects),
         'date' => !empty($result['date']) ? validateDate($result['date']) : NULL,
         'file' => validateFile($result['file'])
     ];
-    //echo 'Правила проверки: ';
-    //print_r($rules);
-    foreach ($data as $key => $value) {
-        if (isset($rules[$key])) {
-            $errors[$key] = $rules[$key];
-        }
-    }
-    if (isset($rules['file'])) {
-        $errors['file'] = $rules['file'];
-    }
+    $errors = array_filter($errors);
     //echo 'Ошибки: ';
     //print_r($errors);
     return $errors;
@@ -152,5 +130,4 @@ function fileUpload($file) {
         $file_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
         return move_uploaded_file($file['tmp_name'], $file_path . $file_name);
     }
-    return 'Ошибка загрузки';
 }
