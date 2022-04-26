@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(empty($errors)) {
         addTask($conn, $post, $file);
         fileUpload($file);
-        //header("Location: /index.php");
+        header("Location: /index.php");
     }
 }
 
