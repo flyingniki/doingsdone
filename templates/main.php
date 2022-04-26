@@ -5,7 +5,7 @@
         <ul class="main-navigation__list">
             <?foreach ($projects as $project):?>
             <li class="main-navigation__list-item">
-                <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>" href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= $project['title'] ?></a>
+                <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>" href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= safeDataString($project['title']) ?></a>
                 <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
             </li>
             <?endforeach;?>
@@ -57,7 +57,7 @@
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text"><?= $task['title'] ?></span>
+                                <span class="checkbox__text"><?= safeDataString($task['title']) ?></span>
                             </label>
                         </td>
 
@@ -74,7 +74,7 @@
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text"><?= $task['title'] ?></span>
+                                <span class="checkbox__text"><?= safeDataString($task['title']) ?></span>
                             </label>
                         </td>
 
@@ -94,7 +94,7 @@
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                        <span class="checkbox__text"><?= $task['title'] ?></span>
+                        <span class="checkbox__text"><?= safeDataString($task['title']) ?></span>
                     </label>
                 </td>
 

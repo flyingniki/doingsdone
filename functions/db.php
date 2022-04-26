@@ -133,14 +133,41 @@ function addTask($conn, $data, $file, $userId = 1) {
         date('Y-m-d H-i-s'),
         $data['name'],
         $file['name'],
-        $data['date'],
         $userId,
         $data['project_id']
     ];
 
-    $sql = "INSERT INTO tasks (`date_add`, `title`, `file`, `date_final`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?, ?)";
+    if (!empty($data['date'])) {
+        $dataArray[] = $data['date'];
+        $sql = "INSERT INTO tasks (`date_add`, `title`, `file`, `user_id`, `project_id`, `date_final`) VALUES (?, ?, ?, ?, ?, ?)";
+    }
+    else {
+        $sql = "INSERT INTO tasks (`date_add`, `title`, `file`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?)";
+    }
+
     $stmt = db_get_prepare_stmt($conn, $sql, $dataArray);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+
     return $result;
+}
+
+/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+@param array $data
+@return array результат
+*/
+function safeDataArray($data) {
+    $result = [];
+    foreach ($data as $key => $value) {
+        $result[$key] = htmlspecialchars(stripslashes(trim($value)));
+    }
+    return $result;
+}
+
+/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+@param string $data
+@return string результат
+*/
+function safeDataString($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
 }

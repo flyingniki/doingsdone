@@ -100,11 +100,11 @@ function validateFile($file) {
 @param array $projects - список проектов
 @return array - массив с ошибками
 */
-function validateTaskForm($data, $file, $projects) {
+function validateTaskForm($file, $projects) {
     $result = [];
-    $result['name'] = filter_input(INPUT_POST, 'name');
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
     $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT);
-    $result['date'] = filter_input(INPUT_POST, 'date');
+    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
     $result['file'] = $file ?? NULL;
     //echo 'Данные из формы: ';
     //print_r($result);

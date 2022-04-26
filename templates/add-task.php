@@ -22,7 +22,7 @@
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input <?= $class['name'] ?? '' ?>" type="text" name="name" id="name" value="" placeholder="Введите название">
+            <input class="form__input <?= $class['name'] ?? '' ?>" type="text" name="name" id="name" value="<?= $post['name'] ?? NULL ?>" placeholder="Введите название">
             <p class="form__message"><?= $errors['name'] ?? '' ?></p>
         </div>
 
@@ -40,7 +40,7 @@
         <div class="form__row">
             <label class="form__label" for="date">Дата выполнения</label>
 
-            <input class="form__input form__input--date <?= $class['date'] ?? '' ?>" type="text" name="date" id="date" value=""
+            <input class="form__input form__input--date <?= $class['date'] ?? '' ?>" type="text" name="date" id="date" value="<?= $post['date'] ?? NULL ?>"
                 placeholder="Введите дату в формате ГГГГ-ММ-ДД">
             <p class="form__message"><?= $errors['date'] ?? '' ?></p>
         </div>

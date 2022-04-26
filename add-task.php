@@ -3,9 +3,9 @@
 require_once('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $post = $_POST;
+    $post = safeDataArray($_POST);
     $file = $_FILES['file'];
-    $errors = validateTaskForm($post, $file, $projects);
+    $errors = validateTaskForm($file, $projects);
     foreach ($errors as $key => $value) {
         $classError[$key] = 'form__input--error';
     }
