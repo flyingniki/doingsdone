@@ -3,7 +3,7 @@
 require_once('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $post = safeDataArray($_POST);
+    $post = filterArray($_POST);
     $file = $_FILES['file'];
     $errors = validateTaskForm($file, $projects);
     foreach ($errors as $key => $value) {
@@ -13,16 +13,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         addTask($conn, $post, $file);
         fileUpload($file);
         header("Location: /index.php");
+        exit();
     }
 }
 
 $content = includeTemplate('add-task.php', [
     'showCompleteTasks' => $showCompleteTasks,
     'projects' => $projects,
-    'post' => $post ?? NULL,
-    'file' => $file ?? NULL,
-    'class' => $classError ?? NULL,
-    'errors' => $errors ?? NULL
+    'post' => $post ?? [],
+    'file' => $file ?? [],
+    'class' => $classError ?? [],
+    'errors' => $errors ?? []
 ]);
 
 $layout = includeTemplate('layout.php', [

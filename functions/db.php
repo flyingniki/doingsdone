@@ -153,21 +153,22 @@ function addTask($conn, $data, $file, $userId = 1) {
 }
 
 /* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+@param string $data
+@return string результат
+*/
+function filterString($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
+/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
 @param array $data
 @return array результат
 */
-function safeDataArray($data) {
+function filterArray($data) {
     $result = [];
     foreach ($data as $key => $value) {
-        $result[$key] = htmlspecialchars(stripslashes(trim($value)));
+        $result[$key] = filterString($value);
     }
     return $result;
 }
 
-/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
-@param string $data
-@return string результат
-*/
-function safeDataString($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
-}

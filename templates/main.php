@@ -5,7 +5,7 @@
         <ul class="main-navigation__list">
             <?foreach ($projects as $project):?>
             <li class="main-navigation__list-item">
-                <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>" href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= safeDataString($project['title']) ?></a>
+                <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>" href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= filterString($project['title']) ?></a>
                 <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
             </li>
             <?endforeach;?>
@@ -57,12 +57,12 @@
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text"><?= safeDataString($task['title']) ?></span>
+                                <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                             </label>
                         </td>
 
                         <td class="task__file">
-                            <a class="<?= $task['file'] ? 'download-link' : NULL?>" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
+                            <a class="<?= $task['file'] ? 'download-link' : '' ?>" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                         </td>
 
                         <td class="task__date"><?= $task['date_final'] ?></td>
@@ -74,12 +74,12 @@
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                                <span class="checkbox__text"><?= safeDataString($task['title']) ?></span>
+                                <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                             </label>
                         </td>
 
                         <td class="task__file">
-                            <a class="<?= $task['file'] ? 'download-link' : NULL?>" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
+                            <a class="<?= $task['file'] ? 'download-link' : '' ?>" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                         </td>
 
                         <td class="task__date"><?= $task['date_final'] ?></td>
@@ -94,12 +94,12 @@
                 <td class="task__select">
                     <label class="checkbox task__checkbox">
                         <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                        <span class="checkbox__text"><?= safeDataString($task['title']) ?></span>
+                        <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                     </label>
                 </td>
 
                 <td class="task__file">
-                    <a class="<?= $task['file'] ? 'download-link' : NULL?>" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
+                    <a class="<?= $task['file'] ? 'download-link' : '' ?>" href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                 </td>
 
                 <td class="task__date"><?= $task['date_final'] ?></td>
