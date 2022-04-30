@@ -4,30 +4,27 @@ require_once('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $post = filterArray($_POST);
-    $file = $_FILES['file'];
-    $errors = validateTaskForm($file, $projects);
+    $users = getUsers($conn);
+    $errors = validateRegisterForm($users);
     foreach ($errors as $key => $value) {
         $classError[$key] = 'form__input--error';
     }
     if(empty($errors)) {
-        addTask($conn, $post, $file);
-        fileUpload($file);
+        addUsers($conn, $post);
         header("Location: /index.php");
         exit();
     }
 }
 
-$content = includeTemplate('add-task.php', [
-    'projects' => $projects,
+$content = includeTemplate('register.php', [
     'post' => $post ?? [],
-    'file' => $file ?? [],
     'class' => $classError ?? [],
     'errors' => $errors ?? []
 ]);
 
 $layout = includeTemplate('layout.php', [
     'content' => $content,
-    'title' => 'Добавить задачу'
+    'title' => 'Регистрация аккаунта'
 ]);
 
 print($layout);

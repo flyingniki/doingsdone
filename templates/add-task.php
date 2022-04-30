@@ -4,10 +4,11 @@
     <nav class="main-navigation">
         <ul class="main-navigation__list">
             <?foreach ($projects as $project):?>
-                <li class="main-navigation__list-item">
-                    <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>" href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= $project['title'] ?></a>
-                    <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
-                </li>
+            <li class="main-navigation__list-item">
+                <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>"
+                    href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= $project['title'] ?></a>
+                <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
+            </li>
             <?endforeach;?>
         </ul>
     </nav>
@@ -22,16 +23,18 @@
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input <?= $class['name'] ?? '' ?>" type="text" name="name" id="name" value="<?= $post['name'] ?? NULL ?>" placeholder="Введите название">
+            <input class="form__input <?= $class['name'] ?? '' ?>" type="text" name="name" id="name"
+                value="<?= $post['name'] ?? NULL ?>" placeholder="Введите название">
             <p class="form__message"><?= $errors['name'] ?? '' ?></p>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="project">Проект <sup>*</sup></label>
 
-            <select class="form__input form__input--select <?= $class['project_id'] ?? '' ?>" name="project_id" id="project">
+            <select class="form__input form__input--select <?= $class['project_id'] ?? '' ?>" name="project_id"
+                id="project">
                 <?foreach ($projects as $project):?>
-                    <option value="<?= $project['id'] ?>"><?= $project['title'] ?></option>
+                <option value="<?= $project['id'] ?>"><?= $project['title'] ?></option>
                 <?endforeach;?>
             </select>
             <p class="form__message"><?= $errors['project_id'] ?? '' ?></p>
@@ -40,8 +43,8 @@
         <div class="form__row">
             <label class="form__label" for="date">Дата выполнения</label>
 
-            <input class="form__input form__input--date <?= $class['date'] ?? '' ?>" type="text" name="date" id="date" value="<?= $post['date'] ?? NULL ?>"
-                placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+            <input class="form__input form__input--date <?= $class['date'] ?? '' ?>" type="text" name="date" id="date"
+                value="<?= $post['date'] ?? NULL ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
             <p class="form__message"><?= $errors['date'] ?? '' ?></p>
         </div>
 

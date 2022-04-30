@@ -172,3 +172,33 @@ function filterArray($data) {
     return $result;
 }
 
+/** Процесс формирования запроса для получения email у списка пользователей
+@param mysqli $conn - ресурс соединения с БД
+@return array - ответ запроса в виде двумерного массива
+*/
+function getUsers(mysqli $conn) {
+    $sql = 'SELECT * FROM users u';
+    return dbQuery($conn, $sql);
+}
+
+/** Сохраняет пользователя в БД
+@param mysqli $conn - ресурс соединения с БД
+@param array $data - данные из формы
+@return mysqli_result|false - результат запроса
+*/
+function addUsers($conn, $data) {
+    $dataArray = [
+        $data['email'],
+        $data['password'],
+        $data['name']
+    ];
+
+    $sql = 'INSERT INTO users (`email`, `password`, `name`) VALUES (?, ?, ?)';
+
+    $stmt = db_get_prepare_stmt($conn, $sql, $dataArray);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return $result;
+}
+

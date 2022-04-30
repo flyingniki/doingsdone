@@ -120,7 +120,7 @@ function validateTaskForm($file, $projects) {
     return $errors;
 }
 
-/** Перемещает загрженный файл из временной директории в папку /uploads/
+/** Перемещает загруженный файл из временной директории в папку /uploads/
 @param array $file - загруженный файл
 @return bool - результат загрузки
  */
@@ -130,4 +130,60 @@ function fileUpload($file) {
         $file_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
         return move_uploaded_file($file['tmp_name'], $file_path . $file_name);
     }
+}
+
+/** Проверяет заполненность обязательных полей
+@param string $field - поле
+@return string|null -  результат проверки
+ */
+function validateRequiredField($field) {
+    if (mb_strlen(trim($field)) == 0) {
+        return 'Это поле должно быть заполнено';
+    }
+    return NULL;
+}
+
+/** Валидация введенного email
+@param string $email - введеный email
+@param array $users - список пользователей
+@return string|null - результат валидации
+ */
+function validateEmail($email, $users) {
+    if (!validateRequiredField($email)) {
+        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            foreach ($users as $user) {
+                if ($email === $user['email']) {
+                    return 'Пользователь с таким e-mail уже существует';
+                    break;
+                }
+                return NULL;
+            }
+        }
+        else {
+            return 'E-mail введён некорректно';
+        }
+    }
+    return validateRequiredField($email);
+}
+
+/** Проверка формы регистрации на ошибки
+@param array $users - список пользователей
+@return (array|null) - результат валидации
+ */
+function validateRegisterForm($users) {
+    $result = [];
+    $result['email'] = filter_input(INPUT_POST, 'email');
+    $result['password'] = filter_input(INPUT_POST, 'password');
+    $result['name'] = filter_input(INPUT_POST, 'name');
+
+    $errors = [
+        'email' => validateEmail($result['email'], $users),
+        'password' => validateRequiredField($result['password']),
+        'name' => validateRequiredField($result['name'])
+    ];
+
+    $errors = array_filter($errors);
+    //echo 'Ошибки: ';
+    //print_r($errors);
+    return $errors;
 }
