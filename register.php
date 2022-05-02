@@ -4,7 +4,6 @@ require_once('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $post = filterArray($_POST);
-    $users = getUsers($conn);
     $errors = validateRegisterForm($users);
     foreach ($errors as $key => $value) {
         $classError[$key] = 'form__input--error';

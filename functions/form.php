@@ -94,7 +94,7 @@ function validateFile($file) {
     return NULL;
 }
 
-/** Проверка формы на ошибки
+/** Валидация формы добавления задачи на ошибки
 @param array $data - данные из формы
 @param array $file - прикрепленный файл
 @param array $projects - список проектов
@@ -143,7 +143,7 @@ function validateRequiredField($field) {
     return NULL;
 }
 
-/** Валидация введенного email
+/** Проверка email в форме регистрации
 @param string $email - введеный email
 @param array $users - список пользователей
 @return string|null - результат валидации
@@ -166,7 +166,7 @@ function validateRegEmail($email, $users) {
     return validateRequiredField($email);
 }
 
-/** Проверка формы регистрации на ошибки
+/** Валидация формы регистрации на ошибки
 @param array $users - список пользователей
 @return (array|null) - результат валидации
  */
@@ -188,7 +188,7 @@ function validateRegisterForm($users) {
     return $errors;
 }
 
-/** Валидация введенного email в форме аутентификации
+/** Проверка email в форме аутентификации
 @param string $email - введеный email
 @return string|null - результат валидации
  */
@@ -204,7 +204,7 @@ function validateAuthEmail($email) {
     return validateRequiredField($email);
 }
 
-/** Проверка формы аутентификации на ошибки
+/** Валидация формы аутентификации на ошибки
 @return (array|null) - результат валидации
  */
 function validateAuthForm() {
@@ -223,4 +223,25 @@ function validateAuthForm() {
     return $errors;
 }
 
+function checkAuth($data, $users) {
+    $login = $data['email'];
+    $password = $data['password'];
+    $errors = [];
+    $errors['email'] = 'Неверное имя пользователя';
+    foreach ($users as $user) {
+        if ($login === $user['email']) {
+            $errors['email'] = '';
+            $passwordHash = password_hash($user['password'], PASSWORD_DEFAULT);
+            if (password_verify($password, $passwordHash)) {
+                $errors['password'] = NULL;
+                break;
+            }
+            else {
+                $errors['password'] = 'Неверный пароль';
+            }
+        }
+    }
+    $errors = array_filter($errors);
+    return $errors;
+}
 

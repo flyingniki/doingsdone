@@ -9,7 +9,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $classError[$key] = 'form__input--error';
     }
     if(empty($errors)) {
-
+        $errors = checkAuth($post, $users);
+        foreach ($errors as $key => $value) {
+            $classError[$key] = 'form__input--error';
+        }
+        if (empty($errors)) {
+            /*
+            аутентифицировать пользователя и записывать в сессию информацию о нём;
+            перенаправлять на главную страницу
+            */
+        }
     }
 }
 

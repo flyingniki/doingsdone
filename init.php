@@ -9,4 +9,5 @@ require_once('functions/form.php'); // обработка форм
 $showCompleteTasks = rand(0, 1); // случайное число
 $conn = dbConnect($config['db']); // записываем соединение в переменную
 $projects = getProjects($conn);
+$users = getUsers($conn);
 
