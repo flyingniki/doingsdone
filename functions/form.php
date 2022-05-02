@@ -148,7 +148,7 @@ function validateRequiredField($field) {
 @param array $users - список пользователей
 @return string|null - результат валидации
  */
-function validateEmail($email, $users) {
+function validateRegEmail($email, $users) {
     if (!validateRequiredField($email)) {
         if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
             foreach ($users as $user) {
@@ -172,12 +172,12 @@ function validateEmail($email, $users) {
  */
 function validateRegisterForm($users) {
     $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email');
-    $result['password'] = filter_input(INPUT_POST, 'password');
-    $result['name'] = filter_input(INPUT_POST, 'name');
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $errors = [
-        'email' => validateEmail($result['email'], $users),
+        'email' => validateRegEmail($result['email'], $users),
         'password' => validateRequiredField($result['password']),
         'name' => validateRequiredField($result['name'])
     ];
@@ -187,3 +187,40 @@ function validateRegisterForm($users) {
     //print_r($errors);
     return $errors;
 }
+
+/** Валидация введенного email в форме аутентификации
+@param string $email - введеный email
+@return string|null - результат валидации
+ */
+function validateAuthEmail($email) {
+    if (!validateRequiredField($email)) {
+        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return NULL;
+        }
+        else {
+            return 'E-mail введён некорректно';
+        }
+    }
+    return validateRequiredField($email);
+}
+
+/** Проверка формы аутентификации на ошибки
+@return (array|null) - результат валидации
+ */
+function validateAuthForm() {
+    $result = [];
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+
+    $errors = [
+        'email' => validateAuthEmail($result['email']),
+        'password' => validateRequiredField($result['password'])
+    ];
+
+    $errors = array_filter($errors);
+    //echo 'Ошибки: ';
+    //print_r($errors);
+    return $errors;
+}
+
+
