@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once('config.php'); // параметры БД
 require_once('functions/db.php'); // работа с БД
 require_once('functions/calculation.php'); // вычисления
