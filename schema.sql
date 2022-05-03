@@ -6,7 +6,7 @@ CREATE DATABASE doingsdone
 
 USE doingsdone;
 
-/*Сначала создаем cusstomers, так как на ее ключи ссылаются внешние ключи из других таблиц*/
+/*Сначала создаем customers, так как на ее ключи ссылаются внешние ключи из других таблиц*/
 CREATE TABLE users (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `date_add` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
