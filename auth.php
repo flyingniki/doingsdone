@@ -2,7 +2,7 @@
 
 require_once('init.php');
 
-if (!empty($_SESSION)) {
+if (!empty($_SESSION['user']['userId'])) {
     header("Location: /index.php");
 }
 
@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($errors)) {
             foreach ($users as $user) {
                 if ($post['email'] === $user['email']) {
-                    $_SESSION['email'] = $user['email'];
-                    $_SESSION['userId'] = $user['id'];
-                    $_SESSION['userName'] = $user['name'];
+                    $_SESSION['user']['email'] = $user['email'];
+                    $_SESSION['user']['userId'] = $user['id'];
+                    $_SESSION['user']['userName'] = $user['name'];
                     break;
                 }
             }
