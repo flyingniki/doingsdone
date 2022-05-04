@@ -102,9 +102,9 @@ function validateFile($file) {
 */
 function validateTaskForm($file, $projects) {
     $result = [];
-    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT);
-    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT) ?? NULL;
+    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
     $result['file'] = $file ?? NULL;
     //echo 'Данные из формы: ';
     //print_r($result);
@@ -172,9 +172,9 @@ function validateRegEmail($email, $users) {
  */
 function validateRegisterForm($users) {
     $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
-    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
-    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
 
     $errors = [
         'email' => validateRegEmail($result['email'], $users),
@@ -209,8 +209,8 @@ function validateAuthEmail($email) {
  */
 function validateAuthForm() {
     $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
-    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
 
     $errors = [
         'email' => validateAuthEmail($result['email']),
