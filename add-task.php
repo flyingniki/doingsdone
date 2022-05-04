@@ -26,6 +26,7 @@ $content = includeTemplate('add-task.php', [
 ]);
 
 $layout = includeTemplate('layout.php', [
+    'userName' => $userName ?? NULL,
     'content' => $content,
     'title' => 'Добавить задачу'
 ]);

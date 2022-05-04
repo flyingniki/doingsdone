@@ -31,6 +31,6 @@ $layout = includeTemplate('layout.php', [
     'content' => $content,
     'title' => 'Дела в порядке'
 ]);
-print_r($_SESSION);
-var_dump(getUserIdFromSession());
+//print_r($_SESSION);
+//var_dump(getUserIdFromSession());
 print($layout);
