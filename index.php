@@ -2,7 +2,7 @@
 
 require_once('init.php');
 
-if (!empty($_SESSION['user']['userId'])) {
+if (getUserIdFromSession()) {
 
     if (isset($_GET['project_id'])) :
         if (checkExist($conn, $_GET['project_id'])) :
@@ -13,6 +13,8 @@ if (!empty($_SESSION['user']['userId'])) {
     else:
         $tasks = getTasks($conn);
     endif;
+
+    $userName = $_SESSION['user']['userName'];
 
     $content = includeTemplate('main.php', [
         'showCompleteTasks' => $showCompleteTasks,
@@ -25,8 +27,10 @@ else {
 }
 
 $layout = includeTemplate('layout.php', [
+    'userName' => $userName ?? NULL,
     'content' => $content,
     'title' => 'Дела в порядке'
 ]);
 print_r($_SESSION);
+var_dump(getUserIdFromSession());
 print($layout);

@@ -36,19 +36,34 @@ function dbQuery($conn, $sql) {
 @return array - ответ запроса в виде двумерного массива
 */
 function getProjects(mysqli $conn) {
-    $sql = 'SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id GROUP BY p.id';
+    $userId = $_SESSION['user']['userId'] ?? NULL;
+    if(isset($userId)) {
+        $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE t.user_id = {$userId} GROUP BY p.id";
+    }
+    else {
+        $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id GROUP BY p.id";
+    }
     return dbQuery($conn, $sql);
 }
 
-/** Процесс формирования запроса для получения списка задач для всех либо каждого проекта
+/** Процесс формирования запроса для получения списка задач для всех либо выбранного проекта
 @param mysqli $conn - ресурс соединения с БД
 @param int $project_id - целое число (идентификатор проекта)
 @return array - ответ запроса в виде двумерного массива
 */
 function getTasks(mysqli $conn, ?int $project_id = NULL): array {
-    $sql = 'SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t ORDER BY date_add DESC';
-    if (isset($project_id)) {
-        $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.project_id = {$project_id} ORDER BY date_add DESC";
+    $userId = $_SESSION['user']['userId'] ?? NULL;
+    if(isset($userId)) {
+        $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId} ORDER BY date_add DESC";
+        if (isset($project_id)) {
+            $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId} AND t.project_id = {$project_id} ORDER BY date_add DESC";
+        }
+    }
+    else {
+        $sql = 'SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t ORDER BY date_add DESC';
+        if (isset($project_id)) {
+            $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.project_id = {$project_id} ORDER BY date_add DESC";
+        }
     }
     return dbQuery($conn, $sql);
 }
@@ -201,4 +216,3 @@ function addUsers($conn, $data) {
 
     return $result;
 }
-

@@ -223,6 +223,11 @@ function validateAuthForm() {
     return $errors;
 }
 
+/* Проверка авторизации
+@param array $data - данные из формы авторизации
+@param array $users - массив существующих пользователей
+@return array -  результат проверки
+*/
 function checkAuth($data, $users) {
     $login = $data['email'];
     $password = $data['password'];
@@ -243,5 +248,13 @@ function checkAuth($data, $users) {
     }
     $errors = array_filter($errors);
     return $errors;
+}
+
+/* Получение ID пользователя из сессии
+@return int - ID пользователя
+*/
+function getUserIdFromSession() {
+    $userId = $_SESSION['user']['userId'] ?? NULL;
+    return $userId;
 }
 

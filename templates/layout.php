@@ -15,7 +15,7 @@
     <div class="page-wrapper">
         <div class="container container--with-sidebar">
 
-            <? if (!empty($_SESSION['user']['userId'])) { ?>
+            <? if (getUserIdFromSession()) { ?>
 
             <header class="main-header">
                 <a href="/">
@@ -28,7 +28,7 @@
 
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
-                            <p>Константин</p>
+                            <p><?= $userName ?></p>
 
                             <a href="/logout.php">Выйти</a>
                         </div>
@@ -61,7 +61,7 @@
                 <p>Веб-приложение для удобного ведения списка дел.</p>
             </div>
 
-            <? if (!empty($_SESSION['user']['userId'])) { ?>
+            <? if (getUserIdFromSession()) { ?>
             <a class="main-footer__button button button--plus" href="/add-task.php">Добавить задачу</a>
             <? } ?>
 
