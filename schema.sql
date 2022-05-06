@@ -38,4 +38,4 @@ CREATE TABLE tasks (
   FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`)
 );
 
-CREATE INDEX t_title ON tasks (title);
+CREATE FULLTEXT INDEX t_title ON tasks (title);
