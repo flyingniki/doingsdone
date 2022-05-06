@@ -37,5 +37,3 @@ CREATE TABLE tasks (
   /*внешний ключ project_id ссылается на ключ id из таблицы projects*/
   FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`)
 );
-
-CREATE FULLTEXT INDEX t_title ON tasks (title);

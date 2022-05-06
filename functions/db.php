@@ -44,24 +44,30 @@ function getProjects(mysqli $conn, int $userId) {
 /** Процесс формирования запроса для получения списка задач для всех либо выбранного проекта
 @param mysqli $conn - ресурс соединения с БД
 @param int $userId - ID пользователя
-@param int $project_id - целое число (идентификатор проекта)
+@param null|int $project_id - целое число (идентификатор проекта)
+@param null|string $searchString - строка поиска
 @return array - ответ запроса в виде двумерного массива
 */
-function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL): array {
-    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId} ORDER BY date_add DESC";
+function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL): array {
+    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId}";
     if (isset($project_id)) {
-        $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId} AND t.project_id = {$project_id} ORDER BY date_add DESC";
+        $sql .= " AND t.project_id = {$project_id}";
     }
+    if (isset($searchString)) {
+        $sql .= " AND MATCH (t.title) AGAINST ('{$searchString}')";
+    }
+    $sql .= " ORDER BY date_add DESC";
     return dbQuery($conn, $sql);
 }
 
 /** Проверка существования записи в таблице БД
 @param mysqli $conn - ресурс соединения с БД
 @param int $project_id - целое число (идентификатор проекта)
+@param int $userId - идентификатор пользователя
 @return bool - результат выполнения запроса
 */
-function checkExist($conn, $project_id) {
-    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE EXISTS (SELECT * FROM projects p WHERE p.id = {$project_id})";
+function checkExist($conn, $project_id, $userId) {
+    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE EXISTS (SELECT * FROM projects p WHERE p.id = {$project_id} AND p.user_id = {$userId})";
     if (dbQuery($conn, $sql)) :
         return true;
     else :
