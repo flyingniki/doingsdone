@@ -2,21 +2,26 @@
 
 require_once('init.php');
 
-if (!empty($_SESSION['user']['userId'])) {
+if (!empty($userId)) {
     header("Location: /index.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $users = getUsers($conn); // список пользователей
     $post = filterArray($_POST);
     $errors = validateAuthForm();
+
     foreach ($errors as $key => $value) {
         $classError[$key] = 'form__input--error';
     }
+
     if(empty($errors)) {
         $errors = checkAuth($post, $users);
         foreach ($errors as $key => $value) {
             $classError[$key] = 'form__input--error';
         }
+
         if (empty($errors)) {
             foreach ($users as $user) {
                 if ($post['email'] === $user['email']) {

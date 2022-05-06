@@ -114,6 +114,10 @@ function validateFile($file) {
     return NULL;
 }
 
+/* Получает и фильтрует данные из формы для последующей валидации
+@param array $file - прикрепленный файл
+@return array - результат фильтрации
+ */
 function getTaskFormData($file) {
     $result = [];
     $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
@@ -191,6 +195,9 @@ function validateRegEmail($email, $users) {
     return validateRequiredField($email);
 }
 
+/* Получает и фильтрует данные из формы для последующей валидации
+@return array - результат фильтрации
+ */
 function getRegisterFormData() {
     $result = [];
     $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
@@ -234,6 +241,9 @@ function validateAuthEmail($email) {
     return validateRequiredField($email);
 }
 
+/* Получает и фильтрует данные из формы для последующей валидации
+@return array - результат фильтрации
+ */
 function getAuthFormData() {
     $result = [];
     $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
