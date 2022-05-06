@@ -1,5 +1,25 @@
 <?php
 
+/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+@param string $data
+@return string результат
+*/
+function filterString($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
+/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+@param array $data
+@return array результат
+*/
+function filterArray($data) {
+    $result = [];
+    foreach ($data as $key => $value) {
+        $result[$key] = filterString($value);
+    }
+    return $result;
+}
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -94,6 +114,15 @@ function validateFile($file) {
     return NULL;
 }
 
+function getTaskFormData($file) {
+    $result = [];
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT) ?? NULL;
+    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['file'] = $file['name'] ?? NULL;
+    return $result;
+}
+
 /** Валидация формы добавления задачи на ошибки
 @param array $data - данные из формы
 @param array $file - прикрепленный файл
@@ -101,11 +130,7 @@ function validateFile($file) {
 @return array - массив с ошибками
 */
 function validateTaskForm($file, $projects) {
-    $result = [];
-    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT) ?? NULL;
-    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['file'] = $file ?? NULL;
+    $result = getTaskFormData($file);
     //echo 'Данные из формы: ';
     //print_r($result);
     $errors = [
@@ -166,15 +191,20 @@ function validateRegEmail($email, $users) {
     return validateRequiredField($email);
 }
 
+function getRegisterFormData() {
+    $result = [];
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    return $result;
+}
+
 /** Валидация формы регистрации на ошибки
 @param array $users - список пользователей
 @return (array|null) - результат валидации
  */
 function validateRegisterForm($users) {
-    $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result = getRegisterFormData();
 
     $errors = [
         'email' => validateRegEmail($result['email'], $users),
@@ -204,13 +234,18 @@ function validateAuthEmail($email) {
     return validateRequiredField($email);
 }
 
+function getAuthFormData() {
+    $result = [];
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    return $result;
+}
+
 /** Валидация формы аутентификации на ошибки
 @return (array|null) - результат валидации
  */
 function validateAuthForm() {
-    $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result = getAuthFormData();
 
     $errors = [
         'email' => validateAuthEmail($result['email']),

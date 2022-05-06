@@ -167,26 +167,6 @@ function addTask($conn, $data, $file, $userId = 1) {
     return $result;
 }
 
-/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
-@param string $data
-@return string результат
-*/
-function filterString($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
-}
-
-/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
-@param array $data
-@return array результат
-*/
-function filterArray($data) {
-    $result = [];
-    foreach ($data as $key => $value) {
-        $result[$key] = filterString($value);
-    }
-    return $result;
-}
-
 /** Процесс формирования запроса для получения email у списка пользователей
 @param mysqli $conn - ресурс соединения с БД
 @return array - ответ запроса в виде двумерного массива
