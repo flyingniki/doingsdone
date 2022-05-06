@@ -67,7 +67,7 @@ function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $s
 @return bool - результат выполнения запроса
 */
 function checkExist($conn, $project_id, $userId) {
-    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE EXISTS (SELECT * FROM projects p WHERE p.id = {$project_id} AND p.user_id = {$userId})";
+    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE EXISTS (SELECT * FROM projects p WHERE t.project_id = {$project_id} AND t.user_id = {$userId})";
     if (dbQuery($conn, $sql)) :
         return true;
     else :
