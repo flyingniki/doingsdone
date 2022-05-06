@@ -2,7 +2,10 @@
 
 require_once('init.php');
 
-if (getUserIdFromSession()) {
+if ($userId !== NULL) {
+
+    $projects = getProjects($conn, $userId); // список проектов
+    $userName = $_SESSION['user']['userName'];
 
     if (isset($_GET['project_id'])) :
         if (checkExist($conn, $_GET['project_id'])) :
@@ -11,10 +14,8 @@ if (getUserIdFromSession()) {
             exit ('Error 404');
         endif;
     else:
-        $tasks = getTasks($conn);
+        $tasks = getTasks($conn, $userId);
     endif;
-
-    $userName = $_SESSION['user']['userName'];
 
     $content = includeTemplate('main.php', [
         'showCompleteTasks' => $showCompleteTasks,
