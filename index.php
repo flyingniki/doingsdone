@@ -9,15 +9,19 @@ if ($userId !== NULL) {
     $projectId = isset($_GET['project_id']) ? filterString($_GET['project_id']) : NULL;
     $searchString = isset($_GET['search']) ? filterString($_GET['search']) : NULL;
 
-    if (isset($projectId)) :
-        if (checkExist($conn, $projectId, $userId)) :
+    if (isset($projectId)) {
+
+        if (checkExist($conn, $projectId, $userId)) {
             $tasks = getTasks($conn, $userId, $projectId, $searchString);
-        else:
+        }
+        else {
             exit ('Error 404');
-        endif;
-    else:
+        }
+    }
+
+    else {
         $tasks = getTasks($conn, $userId, NULL, $searchString);
-    endif;
+    }
 
     $content = includeTemplate('main.php', [
         'showCompleteTasks' => $showCompleteTasks,

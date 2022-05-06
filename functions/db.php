@@ -50,10 +50,10 @@ function getProjects(mysqli $conn, int $userId) {
 */
 function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL): array {
     $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId}";
-    if (isset($project_id)) {
+    if ($project_id !== NULL) {
         $sql .= " AND t.project_id = {$project_id}";
     }
-    if (isset($searchString)) {
+    if ($searchString !== NULL && $searchString !== '') {
         $sql .= " AND MATCH (t.title) AGAINST ('{$searchString}')";
     }
     $sql .= " ORDER BY date_add DESC";
