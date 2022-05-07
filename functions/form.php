@@ -313,7 +313,7 @@ function getProjectFormData() {
 
 function validateProjectName($projectName) {
     if (mb_strlen(trim($projectName)) == 0) {
-        return 'Название задачи должно быть заполнено';
+        return 'Название проекта должно быть заполнено';
     }
     return NULL;
 }
