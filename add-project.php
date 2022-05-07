@@ -8,26 +8,29 @@ if ($userId !== NULL) {
     $userName = $_SESSION['user']['userName'];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
         $post = filterArray($_POST);
-        $file = $_FILES['file'];
-        $errors = validateTaskForm($file, $projects);
-        foreach ($errors as $key => $value) {
-            $classError[$key] = 'form__input--error';
-        }
+        $projectName = $post['name'] ?? NULL;
+        $errors = validateProjectForm();
+        $classError = isset($errors) ? 'form__input--error' : NULL;
+
         if(empty($errors)) {
-            addTask($conn, $post, $file, $userId);
-            fileUpload($file);
-            header("Location: /index.php");
-            exit();
+            $errors = checkExistProjectName($conn, $projectName, $userId);
+            $classError = isset($errors) ? 'form__input--error' : NULL;
+
+            if (empty($errors)) {
+                addProjects($conn, $post, $userId);
+                header("Location: /index.php");
+                exit();
+            }
         }
     }
 
-    $content = includeTemplate('add-task.php', [
+    $content = includeTemplate('add-project.php', [
         'projects' => $projects ?? [],
         'post' => $post ?? [],
-        'file' => $file ?? [],
-        'class' => $classError ?? [],
-        'errors' => $errors ?? []
+        'class' => $classError ?? '',
+        'errors' => $errors ?? ''
     ]);
 
 }
@@ -42,10 +45,3 @@ $layout = includeTemplate('layout.php', [
 ]);
 
 print($layout);
-
-
-
-
-
-
-

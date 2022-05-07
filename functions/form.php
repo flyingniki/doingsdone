@@ -303,3 +303,23 @@ function getUserIdFromSession() {
     return $userId;
 }
 
+/* Получает и фильтрует данные из формы для последующей валидации
+@return array - результат фильтрации
+ */
+function getProjectFormData() {
+    $result = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    return $result;
+}
+
+function validateProjectName($projectName) {
+    if (mb_strlen(trim($projectName)) == 0) {
+        return 'Название задачи должно быть заполнено';
+    }
+    return NULL;
+}
+
+function validateProjectForm() {
+    $result = getProjectFormData();
+    $errors = validateProjectName($result);
+    return $errors;
+}

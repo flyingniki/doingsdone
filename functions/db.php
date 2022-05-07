@@ -37,7 +37,7 @@ function dbQuery($conn, $sql) {
 @return array - ответ запроса в виде двумерного массива
 */
 function getProjects(mysqli $conn, int $userId) {
-    $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE t.user_id = {$userId} GROUP BY p.id";
+    $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE p.user_id = {$userId} GROUP BY p.id";
     return dbQuery($conn, $sql);
 }
 
@@ -136,7 +136,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 @param int $userId - id пользователя
 @return mysqli_result|false - результат запроса
 */
-function addTask($conn, $data, $file, $userId = 1) {
+function addTask($conn, $data, $file, $userId) {
     $dataArray = [
         date('Y-m-d H-i-s'),
         $data['name'],
@@ -182,6 +182,30 @@ function addUsers($conn, $data) {
     ];
 
     $sql = 'INSERT INTO users (`email`, `password`, `name`) VALUES (?, ?, ?)';
+
+    $stmt = db_get_prepare_stmt($conn, $sql, $dataArray);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return $result;
+}
+
+function checkExistProjectName($conn, $projectName, $userId) {
+    $sql = "SELECT * FROM projects p WHERE p.title = '{$projectName}' AND p.user_id = {$userId}";
+    if (dbQuery($conn, $sql)) :
+        return 'Проект с таким именем уже существует';
+    else :
+        return NULL;
+    endif;
+}
+
+function addProjects($conn, $data, $userId) {
+    $dataArray = [
+        $data['name'],
+        $userId
+    ];
+
+    $sql = 'INSERT INTO projects (`title`, `user_id`) VALUES (?, ?)';
 
     $stmt = db_get_prepare_stmt($conn, $sql, $dataArray);
     mysqli_stmt_execute($stmt);
