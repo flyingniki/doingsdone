@@ -20,7 +20,7 @@
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
 
-    <form class="search-form" action="index.php" method="get" autocomplete="off">
+    <form class="search-form" action="/index.php" method="get" autocomplete="off">
         <input class="search-form__input" type="text" name="search" value="<?= $searchString ?>"
             placeholder="Поиск по задачам">
 
@@ -62,7 +62,7 @@
                             <tr class="tasks__item task task--important">
                                 <td class="task__select">
                                     <label class="checkbox task__checkbox">
-                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="" <?= $task['status'] ? 'checked' : '' ?>>
                                         <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                                     </label>
                                 </td>
@@ -80,7 +80,7 @@
                             <tr class="tasks__item task">
                                 <td class="task__select">
                                     <label class="checkbox task__checkbox">
-                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="" <?= $task['status'] ? 'checked' : '' ?>>
                                         <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                                     </label>
                                 </td>
@@ -101,7 +101,7 @@
                         <tr class="tasks__item task task--completed">
                             <td class="task__select">
                                 <label class="checkbox task__checkbox">
-                                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="" <?= $task['status'] ? 'checked' : '' ?>>
                                     <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                                 </label>
                             </td>
