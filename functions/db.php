@@ -60,7 +60,7 @@ function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $s
     return dbQuery($conn, $sql);
 }
 
-/** Проверка существования записи в таблице БД
+/** Проверка существования заданного проекта для текущего пользователя
 @param mysqli $conn - ресурс соединения с БД
 @param int $project_id - целое число (идентификатор проекта)
 @param int $userId - идентификатор пользователя
