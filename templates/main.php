@@ -46,7 +46,7 @@
     </div>
 
     <table class="tasks">
-        <? if (empty($tasks)) {
+        <? if (empty($tasks) && isset($searchString)) {
             echo 'Ничего не найдено по вашему запросу';
         }
             else {

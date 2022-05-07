@@ -27,7 +27,7 @@ if ($userId !== NULL) {
     }
 
     $content = includeTemplate('add-project.php', [
-        'projects' => $projects ?? [],
+        'projects' => $projects,
         'post' => $post ?? [],
         'class' => $classError ?? '',
         'errors' => $errors ?? ''

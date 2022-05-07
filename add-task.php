@@ -23,7 +23,7 @@ if ($userId !== NULL) {
     }
 
     $content = includeTemplate('add-task.php', [
-        'projects' => $projects ?? [],
+        'projects' => $projects,
         'post' => $post ?? [],
         'file' => $file ?? [],
         'class' => $classError ?? [],
