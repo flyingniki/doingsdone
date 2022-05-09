@@ -29,7 +29,7 @@ if ($userId !== NULL) {
         foreach ($tasks as $task) {
             if ($taskId === $task['id']) {
                 $taskStatus = $task['status'];
-                //echo '$taskStatus = '. $taskStatus. ' ';
+                //echo '$taskStatus = '. $taskStatus;
                 invertTaskStatus($conn, $taskId, $taskStatus);
                 header("Location: /index.php");
                 break;
