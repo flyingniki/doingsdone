@@ -32,6 +32,7 @@ if ($userId !== NULL) {
                 //echo '$taskStatus = '. $taskStatus;
                 invertTaskStatus($conn, $taskId, $taskStatus);
                 header("Location: /index.php");
+                exit();
                 break;
             }
         }

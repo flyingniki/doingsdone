@@ -15,7 +15,7 @@
     <div class="page-wrapper">
         <div class="container container--with-sidebar">
 
-            <? if (getUserIdFromSession()) { ?>
+            <?php if (getUserIdFromSession()) { ?>
 
             <header class="main-header">
                 <a href="/">
@@ -36,7 +36,7 @@
                 </div>
             </header>
 
-            <? } else { ?>
+            <?php } else { ?>
 
             <header class="main-header">
                 <a href="/">
@@ -47,7 +47,7 @@
                     <a class="main-header__side-item button button--transparent" href="/auth.php">Войти</a>
                 </div>
             </header>
-            <? } ?>
+            <?php } ?>
 
             <div class="content"><?= $content ?></div>
         </div>
@@ -61,9 +61,9 @@
                 <p>Веб-приложение для удобного ведения списка дел.</p>
             </div>
 
-            <? if (getUserIdFromSession()) { ?>
+            <?php if (getUserIdFromSession()) { ?>
             <a class="main-footer__button button button--plus" href="/add-task.php">Добавить задачу</a>
-            <? } ?>
+            <?php } ?>
 
             <div class="main-footer__social social">
                 <span class="visually-hidden">Мы в соцсетях:</span>

@@ -3,13 +3,13 @@
 
     <nav class="main-navigation">
         <ul class="main-navigation__list">
-            <?foreach ($projects as $project):?>
+            <?php foreach ($projects as $project): ?>
             <li class="main-navigation__list-item">
                 <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>"
                     href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= $project['title'] ?></a>
                 <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
             </li>
-            <?endforeach;?>
+            <?php endforeach; ?>
         </ul>
     </nav>
 

@@ -3,13 +3,13 @@
 
     <nav class="main-navigation">
         <ul class="main-navigation__list">
-            <?foreach ($projects as $project):?>
+            <?php foreach ($projects as $project): ?>
             <li class="main-navigation__list-item">
                 <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>"
                     href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= filterString($project['title']) ?></a>
                 <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
             </li>
-            <?endforeach;?>
+            <?php endforeach; ?>
         </ul>
     </nav>
 
@@ -36,17 +36,17 @@
         </nav>
 
         <label class="checkbox">
-            <? if ($showCompleteTasks === 1): ?>
+            <?php if ($showCompleteTasks === 1): ?>
             <input class="checkbox__input visually-hidden show_completed" type="checkbox" checked>
-            <? elseif ($showCompleteTasks === 0) : ?>
+            <?php elseif ($showCompleteTasks === 0) : ?>
             <input class="checkbox__input visually-hidden show_completed" type="checkbox">
-            <? endif; ?>
+            <?php endif; ?>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
     </div>
 
     <table class="tasks">
-        <? if (empty($tasks) && isset($searchString)) {
+        <?php if (empty($tasks) && isset($searchString)) {
             echo 'Ничего не найдено по вашему запросу';
         }
             else {
@@ -57,7 +57,7 @@
                     endif;
 
                     if ($task['status'] === 0):
-                        if (hourRemain($task['date_final']) && $task['date_final'] !== NULL):?>
+                        if (hourRemain($task['date_final']) && $task['date_final'] !== NULL): ?>
 
                             <tr class="tasks__item task task--important">
                                 <td class="task__select">
@@ -75,7 +75,7 @@
                                 <td class="task__date"><?= $task['date_final'] ?></td>
                             </tr>
 
-                        <? else: ?>
+                        <?php else: ?>
 
                             <tr class="tasks__item task">
                                 <td class="task__select">
@@ -93,10 +93,10 @@
                                 <td class="task__date"><?= $task['date_final'] ?></td>
                             </tr>
 
-                        <? endif; ?>
+                        <?php endif; ?>
         <!--показывать следующий тег <tr/>, если переменная $showCompleteTasks равна единице-->
 
-                    <? elseif ($task['status'] === 1): ?>
+                    <?php elseif ($task['status'] === 1): ?>
 
                         <tr class="tasks__item task task--completed">
                             <td class="task__select">
@@ -113,7 +113,7 @@
 
                             <td class="task__date"><?= $task['date_final'] ?></td>
                         </tr>
-                    <? endif;
+                    <?php endif;
 
                 }
             } ?>
