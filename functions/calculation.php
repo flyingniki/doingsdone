@@ -29,5 +29,4 @@ function hourRemain($taskDate) {
     elseif ($diffHour > 24):
         return false;
     endif;
-    return $diffHour;
 }

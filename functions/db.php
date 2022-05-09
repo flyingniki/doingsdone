@@ -49,7 +49,7 @@ function getProjects(mysqli $conn, int $userId) {
 @return array - ответ запроса в виде двумерного массива
 */
 function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL): array {
-    $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE t.user_id = {$userId}";
+    $sql = "SELECT * FROM tasks t WHERE t.user_id = {$userId}";
     if ($project_id !== NULL) {
         $sql .= " AND t.project_id = {$project_id}";
     }
@@ -214,8 +214,17 @@ function addProjects($conn, $data, $userId) {
     return $result;
 }
 
-function getTaskById(mysqli $conn, $taskId): array {
-    $sql = "SELECT * FROM tasks t WHERE t.id = {$taskId}";
-
+function getTaskStatus($conn, $taskId) {
+    $sql = "SELECT t.status FROM tasks t WHERE t.id = {$taskId}";
     return dbQuery($conn, $sql);
+}
+
+function invertTaskStatus($conn, $taskId, $taskStatus) {
+    if ($taskStatus === 0) {
+        $sql = "UPDATE tasks t SET t.status = 1 WHERE t.id = {$taskId}";
+    }
+    elseif ($taskStatus === 1) {
+        $sql = "UPDATE tasks t SET t.status = 0 WHERE t.id = {$taskId}";
+    }
+    return mysqli_query($conn, $sql);
 }

@@ -23,6 +23,20 @@ if ($userId !== NULL) {
         $tasks = getTasks($conn, $userId, NULL, $searchString);
     }
 
+    $taskId = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
+    //echo '$taskId = '. $taskId. ' ';
+    if (isset($taskId)) {
+        foreach ($tasks as $task) {
+            if ($taskId === $task['id']) {
+                $taskStatus = $task['status'];
+                //echo '$taskStatus = '. $taskStatus. ' ';
+                invertTaskStatus($conn, $taskId, $taskStatus);
+                header("Location: /index.php");
+                break;
+            }
+        }
+    }
+
     $content = includeTemplate('main.php', [
         'showCompleteTasks' => $showCompleteTasks,
         'projects' => $projects,

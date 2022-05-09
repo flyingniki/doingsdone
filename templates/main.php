@@ -36,9 +36,9 @@
         </nav>
 
         <label class="checkbox">
-            <? if ($showCompleteTasks): ?>
+            <? if ($showCompleteTasks === 1): ?>
             <input class="checkbox__input visually-hidden show_completed" type="checkbox" checked>
-            <? else: ?>
+            <? elseif ($showCompleteTasks === 0) : ?>
             <input class="checkbox__input visually-hidden show_completed" type="checkbox">
             <? endif; ?>
             <span class="checkbox__text">Показывать выполненные</span>
@@ -52,17 +52,17 @@
             else {
                 foreach ($tasks as $task) {
 
-                    if (!$showCompleteTasks && $task['status']):
+                    if ($showCompleteTasks === 0 && $task['status'] === 1):
                         continue;
                     endif;
 
-                    if (!$task['status']):
+                    if ($task['status'] === 0):
                         if (hourRemain($task['date_final']) && $task['date_final'] !== NULL):?>
 
                             <tr class="tasks__item task task--important">
                                 <td class="task__select">
                                     <label class="checkbox task__checkbox">
-                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="" <?= $task['status'] ? 'checked' : '' ?>>
+                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= $task['id'] ?>" <?= $task['status'] ? 'checked' : '' ?>>
                                         <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                                     </label>
                                 </td>
@@ -80,7 +80,7 @@
                             <tr class="tasks__item task">
                                 <td class="task__select">
                                     <label class="checkbox task__checkbox">
-                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="" <?= $task['status'] ? 'checked' : '' ?>>
+                                        <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= $task['id'] ?>" <?= $task['status'] ? 'checked' : '' ?>>
                                         <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                                     </label>
                                 </td>
@@ -96,12 +96,12 @@
                         <? endif; ?>
         <!--показывать следующий тег <tr/>, если переменная $showCompleteTasks равна единице-->
 
-                    <? else: ?>
+                    <? elseif ($task['status'] === 1): ?>
 
                         <tr class="tasks__item task task--completed">
                             <td class="task__select">
                                 <label class="checkbox task__checkbox">
-                                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="" <?= $task['status'] ? 'checked' : '' ?>>
+                                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= $task['id'] ?>" <?= $task['status'] ? 'checked' : '' ?>>
                                     <span class="checkbox__text"><?= filterString($task['title']) ?></span>
                                 </label>
                             </td>
