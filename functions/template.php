@@ -1,9 +1,9 @@
 <?php
 
 /** Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
-@param string $tmp_name — Имя файла шаблона
-@param array $data — Ассоциативный массив с данными для шаблона
-@return string — Итоговый HTML
+@param string $tmp_name Имя файла шаблона
+@param array $data Ассоциативный массив с данными для шаблона
+@return string Итоговый HTML
 */
 function includeTemplate($tmpName, array $data = []) {
     $tmpName = 'templates/' . $tmpName;
@@ -18,8 +18,8 @@ function includeTemplate($tmpName, array $data = []) {
 }
 
 /** Добавляет класс к активному пункту меню
-@param array $project - данные об одном проекте (из цикла по массиву проектов)
-@return string - возвращает название класса либо пустую строку
+@param array $project данные об одном проекте (из цикла по массиву проектов)
+@return string возвращает название класса либо пустую строку
 */
 function getClassForMenuItem($project) {
     return (isset($_GET['project_id']) && $_GET['project_id'] === $project['id']) ?
@@ -28,9 +28,9 @@ function getClassForMenuItem($project) {
 }
 
 /** Формирует ссылку на проект
-@param string $scenario - имя страницы
-@param array $params - параметр запроса с идентификатором проекта
-@return string - адрес ссылки
+@param string $scenario имя страницы
+@param array $params параметр запроса с идентификатором проекта
+@return string адрес ссылки
 */
 function buildUrlForProject($scenario, $params) {
     $path = '/' . $scenario . '?';

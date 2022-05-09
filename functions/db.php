@@ -1,8 +1,8 @@
 <?php
 
 /** Устанавливает соединение с БД
-@param array $config - массив с параметрами конфигурации БД
-@return mysqli - ресурс соединения с БД
+@param array $config массив с параметрами конфигурации БД
+@return mysqli ресурс соединения с БД
 */
 function dbConnect($config) {
     $conn = mysqli_connect($config['host'], $config['user'], $config['password'], $config['database']);
@@ -17,9 +17,9 @@ function dbConnect($config) {
 }
 
 /** Устанавливает запрос к БД и выводит результат в виде ассоциативного массива
-@param mysqli $conn - ресурс соединения с БД
-@param string $sql - SQL-запрос в виде строки
-@return array - ответ запроса в виде двумерного массива
+@param mysqli $conn ресурс соединения с БД
+@param string $sql SQL-запрос в виде строки
+@return array ответ запроса в виде двумерного массива
 */
 function dbQuery($conn, $sql) {
     $result = mysqli_query($conn, $sql);
@@ -32,9 +32,9 @@ function dbQuery($conn, $sql) {
 }
 
 /** Процесс формирования запроса для получения списка проектов
-@param mysqli $conn - ресурс соединения с БД
-@param int $userId - ID пользователя
-@return array - ответ запроса в виде двумерного массива
+@param mysqli $conn ресурс соединения с БД
+@param int $userId ID пользователя
+@return array ответ запроса в виде двумерного массива
 */
 function getProjects(mysqli $conn, int $userId) {
     $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE t.user_id = {$userId} GROUP BY p.id";
@@ -42,11 +42,11 @@ function getProjects(mysqli $conn, int $userId) {
 }
 
 /** Процесс формирования запроса для получения списка задач для всех проектов либо выбранного проекта и текущего пользователя
-@param mysqli $conn - ресурс соединения с БД
-@param int $userId - ID пользователя
-@param null|int $project_id - целое число (идентификатор проекта)
-@param null|string $searchString - строка поиска
-@return array - ответ запроса в виде двумерного массива
+@param mysqli $conn ресурс соединения с БД
+@param int $userId ID пользователя
+@param null|int $project_id целое число (идентификатор проекта)
+@param null|string $searchString строка поиска
+@return array ответ запроса в виде двумерного массива
 */
 function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL): array {
     $sql = "SELECT * FROM tasks t WHERE t.user_id = {$userId}";
@@ -61,10 +61,10 @@ function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $s
 }
 
 /** Проверка существования заданного проекта для текущего пользователя
-@param mysqli $conn - ресурс соединения с БД
-@param int $project_id - целое число (идентификатор проекта)
-@param int $userId - идентификатор пользователя
-@return bool - результат выполнения запроса
+@param mysqli $conn ресурс соединения с БД
+@param int $project_id целое число (идентификатор проекта)
+@param int $userId идентификатор пользователя
+@return bool результат выполнения запроса
 */
 function checkExist($conn, $project_id, $userId) {
     $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE EXISTS (SELECT * FROM projects p WHERE t.project_id = {$project_id} AND t.user_id = {$userId})";
@@ -130,11 +130,11 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 }
 
 /** Сохраняет задачу в БД
-@param mysqli $conn - ресурс соединения с БД
-@param array $data - данные из формы
-@param array $file - загруженный файл
-@param int $userId - id пользователя
-@return mysqli_result|false - результат запроса
+@param mysqli $conn ресурс соединения с БД
+@param array $data данные из формы
+@param array $file загруженный файл
+@param int $userId id пользователя
+@return mysqli_result|false результат запроса
 */
 function addTask($conn, $data, $file, $userId) {
     $dataArray = [
@@ -170,9 +170,9 @@ function getUsers(mysqli $conn) {
 }
 
 /** Сохраняет пользователя в БД
-@param mysqli $conn - ресурс соединения с БД
-@param array $data - данные из формы
-@return mysqli_result|false - результат запроса
+@param mysqli $conn ресурс соединения с БД
+@param array $data данные из формы
+@return mysqli_result|false результат запроса
 */
 function addUsers($conn, $data) {
     $dataArray = [
@@ -190,6 +190,12 @@ function addUsers($conn, $data) {
     return $result;
 }
 
+/** Провера существования проекта с заданным названием
+@param mysqli $conn ресурс соединения с БД
+@param string $projectName название проекта
+@param int $userId ID пользователя
+@return string|null результат проверки
+ */
 function checkExistProjectName($conn, $projectName, $userId) {
     $sql = "SELECT * FROM projects p WHERE p.title = '{$projectName}' AND p.user_id = {$userId}";
     if (dbQuery($conn, $sql)) :
@@ -199,6 +205,12 @@ function checkExistProjectName($conn, $projectName, $userId) {
     endif;
 }
 
+/** Функция добавления проекта авторизованным пользователем
+@param mysqli $conn ресурс соединения с БД
+@param array $data данные из формы
+@param mixed $userId ID пользователя
+@return mysqli_result|false результат запроса
+ */
 function addProjects($conn, $data, $userId) {
     $dataArray = [
         $data['name'],
@@ -214,11 +226,22 @@ function addProjects($conn, $data, $userId) {
     return $result;
 }
 
+/** Запрос статуса задачи
+@param mysqli $conn ресурс соединения с БД
+@param int $taskId ID задачи
+@return array ответ запроса в виде двумерного массива
+ */
 function getTaskStatus($conn, $taskId) {
     $sql = "SELECT t.status FROM tasks t WHERE t.id = {$taskId}";
     return dbQuery($conn, $sql);
 }
 
+/** Функция изменения статуса задачи
+@param mysqli $conn ресурс соединения с БД
+@param int $taskId ID задачи
+@param int $taskStatus текущий статус задачи
+@return mysqli_result|false результат запроса
+ */
 function invertTaskStatus($conn, $taskId, $taskStatus) {
     if ($taskStatus === 0) {
         $sql = "UPDATE tasks t SET t.status = 1 WHERE t.id = {$taskId}";

@@ -42,8 +42,8 @@ function isDateValid(string $date) : bool {
 }
 
 /** Проверяет дату завершения задачи
-@param string $date - дата
-@return string|null - результат проверки
+@param string $date дата
+@return string|null результат проверки
 */
 function isDateCorrect($date) {
     if ((strtotime($date) >= time())) {
@@ -53,8 +53,8 @@ function isDateCorrect($date) {
 }
 
 /** Проверяет дату по формату и условию
-@param string $date
-@return string|null - результат проверки
+@param string $date дата
+@return string|null результат проверки
  */
 function validateDate($date) {
     if (!isDateValid($date)) :
@@ -67,9 +67,9 @@ function validateDate($date) {
 }
 
 /** Проверка существования проекта
-@param int $postProjectId - id выбранного проекта
-@param array $projects - массив со списком проектов
-@return string|null - результат проверки
+@param int $postProjectId id выбранного проекта
+@param array $projects массив со списком проектов
+@return string|null результат проверки
  */
 function validateProject($postProjectId, $projects) {
     $res = 'Выбранный проект не существует';
@@ -83,8 +83,8 @@ function validateProject($postProjectId, $projects) {
 }
 
 /** Проверяет, что обязательное поле "название задачи" заполнено
-@param string $taskName
-@return string|null - результат проверки
+@param string $taskName название задачи
+@return string|null результат проверки
  */
 function validateTaskName($taskName) {
     if (mb_strlen(trim($taskName)) == 0) {
@@ -94,8 +94,8 @@ function validateTaskName($taskName) {
 }
 
 /** Проверка загруженного файла по формату и размеру
-@param array $file - загруженный файл
-@return string|null - результат проверки
+@param array $file загруженный файл
+@return string|null результат проверки
 */
 function validateFile($file) {
     if (!empty($file['name'])) {
@@ -115,8 +115,8 @@ function validateFile($file) {
 }
 
 /* Получает и фильтрует данные из формы для последующей валидации
-@param array $file - прикрепленный файл
-@return array - результат фильтрации
+@param array $file прикрепленный файл
+@return array результат фильтрации
  */
 function getTaskFormData($file) {
     $result = [];
@@ -128,10 +128,10 @@ function getTaskFormData($file) {
 }
 
 /** Валидация формы добавления задачи на ошибки
-@param array $data - данные из формы
-@param array $file - прикрепленный файл
-@param array $projects - список проектов
-@return array - массив с ошибками
+@param array $data данные из формы
+@param array $file прикрепленный файл
+@param array $projects список проектов
+@return array массив с ошибками
 */
 function validateTaskForm($file, $projects) {
     $result = getTaskFormData($file);
@@ -150,8 +150,8 @@ function validateTaskForm($file, $projects) {
 }
 
 /** Перемещает загруженный файл из временной директории в папку /uploads/
-@param array $file - загруженный файл
-@return bool - результат загрузки
+@param array $file загруженный файл
+@return bool результат загрузки
  */
 function fileUpload($file) {
     if (isset($file)) {
@@ -162,8 +162,8 @@ function fileUpload($file) {
 }
 
 /** Проверяет заполненность обязательных полей
-@param string $field - поле
-@return string|null -  результат проверки
+@param string $field поле ввода
+@return string|null  результат проверки
  */
 function validateRequiredField($field) {
     if (mb_strlen(trim($field)) == 0) {
@@ -173,9 +173,9 @@ function validateRequiredField($field) {
 }
 
 /** Проверка email в форме регистрации
-@param string $email - введеный email
-@param array $users - список пользователей
-@return string|null - результат валидации
+@param string $email введеный email
+@param array $users список пользователей
+@return string|null результат валидации
  */
 function validateRegEmail($email, $users) {
     if (!validateRequiredField($email)) {
@@ -196,7 +196,7 @@ function validateRegEmail($email, $users) {
 }
 
 /* Получает и фильтрует данные из формы для последующей валидации
-@return array - результат фильтрации
+@return array результат фильтрации
  */
 function getRegisterFormData() {
     $result = [];
@@ -207,8 +207,8 @@ function getRegisterFormData() {
 }
 
 /** Валидация формы регистрации на ошибки
-@param array $users - список пользователей
-@return (array|null) - результат валидации
+@param array $users список пользователей
+@return array|null результат валидации
  */
 function validateRegisterForm($users) {
     $result = getRegisterFormData();
@@ -226,8 +226,8 @@ function validateRegisterForm($users) {
 }
 
 /** Проверка email в форме аутентификации
-@param string $email - введеный email
-@return string|null - результат валидации
+@param string $email введеный email
+@return string|null результат валидации
  */
 function validateAuthEmail($email) {
     if (!validateRequiredField($email)) {
@@ -242,7 +242,7 @@ function validateAuthEmail($email) {
 }
 
 /* Получает и фильтрует данные из формы для последующей валидации
-@return array - результат фильтрации
+@return array результат фильтрации
  */
 function getAuthFormData() {
     $result = [];
@@ -252,7 +252,7 @@ function getAuthFormData() {
 }
 
 /** Валидация формы аутентификации на ошибки
-@return (array|null) - результат валидации
+@return (array|null) результат валидации
  */
 function validateAuthForm() {
     $result = getAuthFormData();
@@ -269,9 +269,9 @@ function validateAuthForm() {
 }
 
 /* Проверка авторизации
-@param array $data - данные из формы авторизации
-@param array $users - массив существующих пользователей
-@return array -  результат проверки
+@param array $data данные из формы авторизации
+@param array $users массив существующих пользователей
+@return array результат проверки
 */
 function checkAuth($data, $users) {
     $login = $data['email'];
@@ -296,7 +296,7 @@ function checkAuth($data, $users) {
 }
 
 /* Получение ID пользователя из сессии
-@return int - ID пользователя
+@return int ID пользователя
 */
 function getUserIdFromSession() {
     $userId = $_SESSION['user']['userId'] ?? NULL;
@@ -304,7 +304,7 @@ function getUserIdFromSession() {
 }
 
 /* Получает и фильтрует данные из формы для последующей валидации
-@return array - результат фильтрации
+@return array результат фильтрации
  */
 function getProjectFormData() {
     $result = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
