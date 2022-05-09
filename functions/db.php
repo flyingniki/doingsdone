@@ -37,7 +37,7 @@ function dbQuery($conn, $sql) {
 @return array ответ запроса в виде двумерного массива
 */
 function getProjects(mysqli $conn, int $userId) {
-    $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE t.user_id = {$userId} GROUP BY p.id";
+    $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE p.user_id = {$userId} GROUP BY p.id";
     return dbQuery($conn, $sql);
 }
 
@@ -217,7 +217,7 @@ function addProjects($conn, $data, $userId) {
         $userId
     ];
 
-    $sql = 'INSERT INTO projects (`title`, `user_id`) VALUES (?, ?)';
+    $sql = "INSERT INTO projects (`title`, `user_id`) VALUES (?, ?)";
 
     $stmt = db_get_prepare_stmt($conn, $sql, $dataArray);
     mysqli_stmt_execute($stmt);
