@@ -24,12 +24,12 @@ if ($userId !== NULL) {
     }
 
     $taskId = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);
-    //echo '$taskId = '. $taskId. ' ';
+    $showCompleted = filter_input(INPUT_GET, 'show_completed', FILTER_VALIDATE_INT);
+
     if (isset($taskId)) {
         foreach ($tasks as $task) {
             if ($taskId === $task['id']) {
                 $taskStatus = $task['status'];
-                //echo '$taskStatus = '. $taskStatus;
                 invertTaskStatus($conn, $taskId, $taskStatus);
                 header("Location: /index.php");
                 exit();
@@ -38,13 +38,22 @@ if ($userId !== NULL) {
         }
     }
 
+    if(isset($showCompleted)) {
+        $showCompleteTasks = $showCompleted;
+    }
+    else {
+        $showCompleteTasks = 1;
+    }
+
     $content = includeTemplate('main.php', [
         'showCompleteTasks' => $showCompleteTasks,
         'projects' => $projects,
         'tasks' => $tasks,
         'searchString' => $searchString
     ]);
+
 }
+
 else {
     $content = includeTemplate('guest.php', []);
 }
@@ -54,6 +63,5 @@ $layout = includeTemplate('layout.php', [
     'content' => $content,
     'title' => 'Дела в порядке'
 ]);
-//print_r($_SESSION);
-//var_dump(getUserIdFromSession());
+
 print($layout);

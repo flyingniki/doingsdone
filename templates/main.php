@@ -4,11 +4,11 @@
     <nav class="main-navigation">
         <ul class="main-navigation__list">
             <?php foreach ($projects as $project): ?>
-            <li class="main-navigation__list-item">
-                <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>"
-                    href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= filterString($project['title']) ?></a>
-                <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
-            </li>
+                <li class="main-navigation__list-item">
+                    <a class="main-navigation__list-item-link <?= getClassForMenuItem($project) ?>"
+                        href=<?= buildUrlForProject('index.php', ['project_id' => $project['id']]) ?>><?= filterString($project['title']) ?></a>
+                    <span class="main-navigation__list-item-count"><?= $project['tasks_count'] ?></span>
+                </li>
             <?php endforeach; ?>
         </ul>
     </nav>
@@ -37,9 +37,9 @@
 
         <label class="checkbox">
             <?php if ($showCompleteTasks === 1): ?>
-            <input class="checkbox__input visually-hidden show_completed" type="checkbox" checked>
+                <input class="checkbox__input visually-hidden show_completed" type="checkbox" checked>
             <?php elseif ($showCompleteTasks === 0) : ?>
-            <input class="checkbox__input visually-hidden show_completed" type="checkbox">
+                <input class="checkbox__input visually-hidden show_completed" type="checkbox">
             <?php endif; ?>
             <span class="checkbox__text">Показывать выполненные</span>
         </label>
