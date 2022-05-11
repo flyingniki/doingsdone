@@ -1,0 +1,14 @@
+{
+    "name": "flying_niki/doingsdone",
+    "description": "Website for some doings",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Petr Nikitin"
+        }
+    ],
+    "require": {
+        "symfony/mailer": "^6.0"
+    }
+}
