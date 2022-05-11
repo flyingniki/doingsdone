@@ -261,3 +261,12 @@ function invertTaskStatus($conn, $taskId, $taskStatus) {
     }
     return mysqli_query($conn, $sql);
 }
+
+/** Процесс формирования запроса для получения списка невыполненных задач
+@param mysqli $conn ресурс соединения с БД
+@return array ответ запроса в виде двумерного массива
+*/
+function getUncompletedTasks(mysqli $conn): array {
+    $sql = "SELECT t.title, t.user_id, t.date_final, u.name, u.email FROM tasks t LEFT JOIN users u ON u.id = t.user_id WHERE t.date_final = CURDATE() AND t.status = 0 ORDER BY t.user_id ASC";
+    return dbQuery($conn, $sql);
+}

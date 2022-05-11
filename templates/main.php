@@ -72,7 +72,7 @@
                                         href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                                 </td>
 
-                                <td class="task__date"><?= $task['date_final'] ?></td>
+                                <td class="task__date"><?= date('d-m-Y', strtotime($task['date_final'])) ?></td>
                             </tr>
 
                         <?php else: ?>
@@ -90,7 +90,7 @@
                                         href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                                 </td>
 
-                                <td class="task__date"><?= $task['date_final'] ?></td>
+                                <td class="task__date"><?= date('d-m-Y', strtotime($task['date_final'])) ?></td>
                             </tr>
 
                         <?php endif; ?>
@@ -111,7 +111,7 @@
                                     href="/uploads/<?= $task['file'] ?>"><?= $task['file'] ?></a>
                             </td>
 
-                            <td class="task__date"><?= $task['date_final'] ?></td>
+                            <td class="task__date"><?= date('d-m-Y', strtotime($task['date_final'])) ?></td>
                         </tr>
                     <?php endif;
 
