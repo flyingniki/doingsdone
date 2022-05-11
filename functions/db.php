@@ -41,20 +41,30 @@ function getProjects(mysqli $conn, int $userId) {
     return dbQuery($conn, $sql);
 }
 
-/** Процесс формирования запроса для получения списка задач для всех проектов либо выбранного проекта и текущего пользователя
+/** Процесс формирования запроса для получения списка задач для всех проектов либо выбранного проекта
+ *  и текущего пользователя с учетом строки поиска и фильтров по дате
 @param mysqli $conn ресурс соединения с БД
 @param int $userId ID пользователя
 @param null|int $project_id целое число (идентификатор проекта)
 @param null|string $searchString строка поиска
 @return array ответ запроса в виде двумерного массива
 */
-function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL): array {
+function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL, ?string $dateFilter = NULL): array {
     $sql = "SELECT * FROM tasks t WHERE t.user_id = {$userId}";
     if ($project_id !== NULL) {
         $sql .= " AND t.project_id = {$project_id}";
     }
     if ($searchString !== NULL && $searchString !== '') {
         $sql .= " AND MATCH (t.title) AGAINST ('{$searchString}')";
+    }
+    if ($dateFilter === 'today') {
+        $sql .= " AND t.date_final = CURDATE()";
+    }
+    if ($dateFilter === 'tomorrow') {
+        $sql .= " AND t.date_final = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
+    }
+    if ($dateFilter === 'overdue') {
+        $sql .= " AND t.date_final < CURDATE() AND t.status = 0";
     }
     $sql .= " ORDER BY date_add DESC";
     return dbQuery($conn, $sql);

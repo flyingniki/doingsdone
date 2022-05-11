@@ -8,11 +8,12 @@ if ($userId !== NULL) {
     $userName = $_SESSION['user']['userName'];
     $projectId = isset($_GET['project_id']) ? filterString($_GET['project_id']) : NULL;
     $searchString = isset($_GET['search']) ? filterString($_GET['search']) : NULL;
+    $dateFilter = isset($_GET['filter']) ? filterString($_GET['filter']) : NULL;
 
     if (isset($projectId)) {
 
         if (checkExist($conn, $projectId, $userId)) {
-            $tasks = getTasks($conn, $userId, $projectId, $searchString);
+            $tasks = getTasks($conn, $userId, $projectId, $searchString, $dateFilter);
         }
         else {
             exit ('Error 404');
@@ -20,7 +21,7 @@ if ($userId !== NULL) {
     }
 
     else {
-        $tasks = getTasks($conn, $userId, NULL, $searchString);
+        $tasks = getTasks($conn, $userId, NULL, $searchString, $dateFilter);
     }
 
     $taskId = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);

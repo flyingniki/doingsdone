@@ -39,3 +39,15 @@ function buildUrlForProject($scenario, $params) {
     return $url;
 }
 
+/** Формирует ссылку для фильтра
+@param string $scenario имя страницы
+@param array $params параметр запроса с названием фильтра
+@return string адрес ссылки
+*/
+function buildUrlForFilter($scenario, $params) {
+    $path = '/' . $scenario . '?';
+    $query = http_build_query($params);
+    $url = $path . $query;
+    return $url;
+}
+
