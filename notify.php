@@ -8,24 +8,31 @@ require_once ('vendor/autoload.php');
 require_once ('init.php');
 
 $tasks = getUncompletedTasks($conn);
+$usersTasks = [];
 
 foreach ($tasks as $task) {
-    $taskUserId[] = $task['user_id'];
-    $taskUserName[] = $task['name'];
-    $taskUserEmail[] = $task['email'];
-    $taskTitle[] = $task['title'];
+    $usersTasks[$task['email']][] = [
+        'title' => $task['title'],
+        'date_final' => $task['date_final']
+    ];
 }
-print_r($tasks);
 
+echo '<pre>';
+print_r($usersTasks);
+echo '</pre>';
+
+foreach ($usersTasks as $userTask) {
+}
+/*
 // Конфигурация траспорта
 $dsn = 'smtp://4234:32434@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login';
 $transport = Transport::fromDsn($dsn);
 // Формирование сообщения
 $message = new Email();
-$message->to("flying_niki@mail.ru");
+$message->to($taskUserEmail);
 $message->from("keks@phpdemo.ru");
 $message->subject("Уведомление от сервиса «Дела в порядке»");
-$message->text("Уважаемый, %имя пользователя%. У вас запланирована задача %имя задачи% на %время задачи%");
+$message->text("Уважаемый, ". $taskUserName . ".У вас запланирована задача " . $taskTitle. " на " . $taskDateFinal);
 // Отправка сообщения
 $mailer = new Mailer($transport);
-
+*/
