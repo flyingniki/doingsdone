@@ -12,6 +12,7 @@ $usersTasks = [];
 
 foreach ($tasks as $task) {
     $usersTasks[$task['email']][] = [
+        'name' => $task['name'],
         'title' => $task['title'],
         'date_final' => $task['date_final']
     ];
@@ -21,18 +22,29 @@ echo '<pre>';
 print_r($usersTasks);
 echo '</pre>';
 
-foreach ($usersTasks as $userTask) {
+foreach ($usersTasks as $userEmail => $userTask) {
+    $taskTitle = '';
+    $taskDateFinal = '';
+    foreach ($userTask as $taskInfo) {
+        $taskUserName = $taskInfo['name'];
+        $taskTitle .= '«' . $taskInfo['title']. '» ';
+        $taskDateFinal = $taskInfo['date_final'];
+    }
+
+    // Конфигурация траспорта
+    $dsn = 'smtp://4234:32434@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login';
+    $transport = Transport::fromDsn($dsn);
+    // Формирование сообщения
+    $message = new Email();
+    $message->to($userEmail);
+    $message->from("keks@phpdemo.ru");
+    $message->subject("Уведомление от сервиса «Дела в порядке»");
+    $message->text("Уважаемый, ". $taskUserName . ". У вас запланирована задача " . $taskTitle. "на " . date('d-m-Y', strtotime($taskDateFinal)));
+    // Отправка сообщения
+    $mailer = new Mailer($transport);
+    echo '<pre>';
+    print_r($message);
+    echo '</pre>';
 }
-/*
-// Конфигурация траспорта
-$dsn = 'smtp://4234:32434@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login';
-$transport = Transport::fromDsn($dsn);
-// Формирование сообщения
-$message = new Email();
-$message->to($taskUserEmail);
-$message->from("keks@phpdemo.ru");
-$message->subject("Уведомление от сервиса «Дела в порядке»");
-$message->text("Уважаемый, ". $taskUserName . ".У вас запланирована задача " . $taskTitle. " на " . $taskDateFinal);
-// Отправка сообщения
-$mailer = new Mailer($transport);
-*/
+
+
