@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($errors as $key => $value) {
         $classError[$key] = 'form__input--error';
     }
-    if(empty($errors)) {
+    if (empty($errors)) {
         addUsers($conn, $post);
         header("Location: /index.php");
         exit();
@@ -27,7 +27,3 @@ $layout = includeTemplate('layout.php', [
 ]);
 
 print($layout);
-
-
-
-

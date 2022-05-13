@@ -3,14 +3,14 @@
 /** Устанавливает соединение с БД
 @param array $config массив с параметрами конфигурации БД
 @return mysqli ресурс соединения с БД
-*/
-function dbConnect($config) {
+ */
+function dbConnect($config)
+{
     $conn = mysqli_connect($config['host'], $config['user'], $config['password'], $config['database']);
     mysqli_options($conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
     if ($conn === false) {
         print("Ошибка подключения: " . mysqli_connect_error());
-    }
-    else {
+    } else {
         mysqli_set_charset($conn, "utf8");
     }
     return $conn;
@@ -20,12 +20,13 @@ function dbConnect($config) {
 @param mysqli $conn ресурс соединения с БД
 @param string $sql SQL-запрос в виде строки
 @return array ответ запроса в виде двумерного массива
-*/
-function dbQuery($conn, $sql) {
+ */
+function dbQuery($conn, $sql)
+{
     $result = mysqli_query($conn, $sql);
     if (!$result) {
         $error = mysqli_error($conn);
-	    print("Ошибка MySQL: " . $error);
+        print("Ошибка MySQL: " . $error);
     };
     $res_assoc = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $res_assoc;
@@ -35,8 +36,9 @@ function dbQuery($conn, $sql) {
 @param mysqli $conn ресурс соединения с БД
 @param int $userId ID пользователя
 @return array ответ запроса в виде двумерного массива
-*/
-function getProjects(mysqli $conn, int $userId) {
+ */
+function getProjects(mysqli $conn, int $userId)
+{
     $sql = "SELECT p.id, p.title, COUNT(t.id) AS tasks_count FROM projects p LEFT JOIN tasks t ON t.project_id = p.id WHERE p.user_id = {$userId} GROUP BY p.id";
     return dbQuery($conn, $sql);
 }
@@ -48,8 +50,9 @@ function getProjects(mysqli $conn, int $userId) {
 @param null|int $project_id целое число (идентификатор проекта)
 @param null|string $searchString строка поиска
 @return array ответ запроса в виде двумерного массива
-*/
-function getTasks(mysqli $conn, int $userId, ?int $project_id = null, ?string $searchString = null, ?string $dateFilter = null): array {
+ */
+function getTasks(mysqli $conn, int $userId, ?int $project_id = null, ?string $searchString = null, ?string $dateFilter = null): array
+{
     $sql = "SELECT * FROM tasks t WHERE t.user_id = {$userId}";
     if ($project_id !== null) {
         $sql .= " AND t.project_id = {$project_id}";
@@ -75,8 +78,9 @@ function getTasks(mysqli $conn, int $userId, ?int $project_id = null, ?string $s
 @param int $project_id целое число (идентификатор проекта)
 @param int $userId идентификатор пользователя
 @return bool результат выполнения запроса
-*/
-function checkExist($conn, $project_id, $userId) {
+ */
+function checkExist($conn, $project_id, $userId)
+{
     $sql = "SELECT t.date_add, t.status, t.title, t.file, t.date_final, t.user_id, t.project_id FROM tasks t WHERE EXISTS (SELECT * FROM projects p WHERE t.project_id = {$project_id} AND t.user_id = {$userId})";
     if (dbQuery($conn, $sql)) :
         return true;
@@ -94,7 +98,8 @@ function checkExist($conn, $project_id, $userId) {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -111,11 +116,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
+            } else if (is_string($value)) {
                 $type = 's';
-            }
-            else if (is_double($value)) {
+            } else if (is_double($value)) {
                 $type = 'd';
             }
 
@@ -145,8 +148,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 @param array $file загруженный файл
 @param int $userId id пользователя
 @return mysqli_result|false результат запроса
-*/
-function addTask($conn, $data, $file, $userId) {
+ */
+function addTask($conn, $data, $file, $userId)
+{
     $dataArray = [
         date('Y-m-d H-i-s'),
         $data['name'],
@@ -158,8 +162,7 @@ function addTask($conn, $data, $file, $userId) {
     if (!empty($data['date'])) {
         $dataArray[] = $data['date'];
         $sql = "INSERT INTO tasks (`date_add`, `title`, `file`, `user_id`, `project_id`, `date_final`) VALUES (?, ?, ?, ?, ?, ?)";
-    }
-    else {
+    } else {
         $sql = "INSERT INTO tasks (`date_add`, `title`, `file`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?)";
     }
 
@@ -173,8 +176,9 @@ function addTask($conn, $data, $file, $userId) {
 /** Процесс формирования запроса для получения списка пользователей
 @param mysqli $conn - ресурс соединения с БД
 @return array - ответ запроса в виде двумерного массива
-*/
-function getUsers(mysqli $conn) {
+ */
+function getUsers(mysqli $conn)
+{
     $sql = 'SELECT * FROM users u';
     return dbQuery($conn, $sql);
 }
@@ -183,8 +187,9 @@ function getUsers(mysqli $conn) {
 @param mysqli $conn ресурс соединения с БД
 @param array $data данные из формы
 @return mysqli_result|false результат запроса
-*/
-function addUsers($conn, $data) {
+ */
+function addUsers($conn, $data)
+{
     $dataArray = [
         $data['email'],
         $data['password'],
@@ -206,7 +211,8 @@ function addUsers($conn, $data) {
 @param int $userId ID пользователя
 @return string|null результат проверки
  */
-function checkExistProjectName($conn, $projectName, $userId) {
+function checkExistProjectName($conn, $projectName, $userId)
+{
     $sql = "SELECT * FROM projects p WHERE p.title = '{$projectName}' AND p.user_id = {$userId}";
     if (dbQuery($conn, $sql)) :
         return 'Проект с таким именем уже существует';
@@ -221,7 +227,8 @@ function checkExistProjectName($conn, $projectName, $userId) {
 @param mixed $userId ID пользователя
 @return mysqli_result|false результат запроса
  */
-function addProjects($conn, $data, $userId) {
+function addProjects($conn, $data, $userId)
+{
     $dataArray = [
         $data['name'],
         $userId
@@ -241,7 +248,8 @@ function addProjects($conn, $data, $userId) {
 @param int $taskId ID задачи
 @return array ответ запроса в виде двумерного массива
  */
-function getTaskStatus($conn, $taskId) {
+function getTaskStatus($conn, $taskId)
+{
     $sql = "SELECT t.status FROM tasks t WHERE t.id = {$taskId}";
     return dbQuery($conn, $sql);
 }
@@ -252,11 +260,11 @@ function getTaskStatus($conn, $taskId) {
 @param int $taskStatus текущий статус задачи
 @return mysqli_result|false результат запроса
  */
-function invertTaskStatus($conn, $taskId, $taskStatus) {
+function invertTaskStatus($conn, $taskId, $taskStatus)
+{
     if ($taskStatus === 0) {
         $sql = "UPDATE tasks t SET t.status = 1 WHERE t.id = {$taskId}";
-    }
-    elseif ($taskStatus === 1) {
+    } elseif ($taskStatus === 1) {
         $sql = "UPDATE tasks t SET t.status = 0 WHERE t.id = {$taskId}";
     }
     return mysqli_query($conn, $sql);
@@ -265,8 +273,9 @@ function invertTaskStatus($conn, $taskId, $taskStatus) {
 /** Процесс формирования запроса для получения списка невыполненных задач
 @param mysqli $conn ресурс соединения с БД
 @return array ответ запроса в виде двумерного массива
-*/
-function getUncompletedTasks(mysqli $conn): array {
+ */
+function getUncompletedTasks(mysqli $conn): array
+{
     $sql = "SELECT t.title, t.user_id, t.date_final, u.name, u.email FROM tasks t LEFT JOIN users u ON u.id = t.user_id WHERE t.date_final = CURDATE() AND t.status = 0 ORDER BY t.user_id ASC";
     return dbQuery($conn, $sql);
 }

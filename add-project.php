@@ -14,7 +14,7 @@ if ($userId !== null) {
         $errors = validateProjectForm();
         $classError = isset($errors) ? 'form__input--error' : null;
 
-        if(empty($errors)) {
+        if (empty($errors)) {
             $errors = checkExistProjectName($conn, $projectName, $userId);
             $classError = isset($errors) ? 'form__input--error' : null;
 
@@ -32,9 +32,7 @@ if ($userId !== null) {
         'class' => $classError ?? '',
         'errors' => $errors ?? ''
     ]);
-
-}
-else {
+} else {
     $content = includeTemplate('guest.php', []);
 }
 

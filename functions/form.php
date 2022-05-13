@@ -4,7 +4,8 @@
 @param string $data
 @return string результат
 */
-function filterString($data) {
+function filterString($data)
+{
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
@@ -12,7 +13,8 @@ function filterString($data) {
 @param array $data
 @return array результат
 */
-function filterArray($data) {
+function filterArray($data)
+{
     $result = [];
     foreach ($data as $key => $value) {
         $result[$key] = filterString($value);
@@ -34,7 +36,8 @@ function filterArray($data) {
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function isDateValid(string $date) : bool {
+function isDateValid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -44,8 +47,9 @@ function isDateValid(string $date) : bool {
 /** Проверяет дату завершения задачи
 @param string $date дата
 @return string|null результат проверки
-*/
-function isDateCorrect($date) {
+ */
+function isDateCorrect($date)
+{
     if ((strtotime($date) >= time())) {
         return true;
     }
@@ -56,7 +60,8 @@ function isDateCorrect($date) {
 @param string $date дата
 @return string|null результат проверки
  */
-function validateDate($date) {
+function validateDate($date)
+{
     if (!isDateValid($date)) :
         return 'Введите дату в формате «ГГГГ-ММ-ДД»';
     elseif (!isDateCorrect($date)) :
@@ -71,7 +76,8 @@ function validateDate($date) {
 @param array $projects массив со списком проектов
 @return string|null результат проверки
  */
-function validateProject($postProjectId, $projects) {
+function validateProject($postProjectId, $projects)
+{
     $res = 'Выбранный проект не существует';
     foreach ($projects as $project) {
         if ($postProjectId === $project['id']) {
@@ -86,7 +92,8 @@ function validateProject($postProjectId, $projects) {
 @param string $taskName название задачи
 @return string|null результат проверки
  */
-function validateTaskName($taskName) {
+function validateTaskName($taskName)
+{
     if (mb_strlen(trim($taskName)) == 0) {
         return 'Название задачи должно быть заполнено';
     }
@@ -96,8 +103,9 @@ function validateTaskName($taskName) {
 /** Проверка загруженного файла по формату и размеру
 @param array $file загруженный файл
 @return string|null результат проверки
-*/
-function validateFile($file) {
+ */
+function validateFile($file)
+{
     if (!empty($file['name'])) {
         $file_tmp_name = $file['tmp_name'];
         $file_size = $file['size'];
@@ -106,8 +114,7 @@ function validateFile($file) {
 
         if (isset($file_type) && $file_type !== 'application/pdf') {
             return 'Загрузите файл в формате PDF';
-        }
-        elseif ($file_size > 5000000) {
+        } elseif ($file_size > 5000000) {
             return 'Максимальный размер файла: 5Мб';
         }
     }
@@ -118,7 +125,8 @@ function validateFile($file) {
 @param array $file прикрепленный файл
 @return array результат фильтрации
  */
-function getTaskFormData($file) {
+function getTaskFormData($file)
+{
     $result = [];
     $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT) ?? null;
@@ -132,8 +140,9 @@ function getTaskFormData($file) {
 @param array $file прикрепленный файл
 @param array $projects список проектов
 @return array массив с ошибками
-*/
-function validateTaskForm($file, $projects) {
+ */
+function validateTaskForm($file, $projects)
+{
     $result = getTaskFormData($file);
     //echo 'Данные из формы: ';
     //print_r($result);
@@ -153,7 +162,8 @@ function validateTaskForm($file, $projects) {
 @param array $file загруженный файл
 @return bool результат загрузки
  */
-function fileUpload($file) {
+function fileUpload($file)
+{
     if (isset($file)) {
         $file_name = $file['name'];
         $file_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
@@ -165,7 +175,8 @@ function fileUpload($file) {
 @param string $field поле ввода
 @return string|null  результат проверки
  */
-function validateRequiredField($field) {
+function validateRequiredField($field)
+{
     if (mb_strlen(trim($field)) == 0) {
         return 'Это поле должно быть заполнено';
     }
@@ -177,9 +188,10 @@ function validateRequiredField($field) {
 @param array $users список пользователей
 @return string|null результат валидации
  */
-function validateRegEmail($email, $users) {
+function validateRegEmail($email, $users)
+{
     if (!validateRequiredField($email)) {
-        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             foreach ($users as $user) {
                 if ($email === $user['email']) {
                     return 'Пользователь с таким e-mail уже существует';
@@ -187,8 +199,7 @@ function validateRegEmail($email, $users) {
                 }
                 return null;
             }
-        }
-        else {
+        } else {
             return 'E-mail введён некорректно';
         }
     }
@@ -198,7 +209,8 @@ function validateRegEmail($email, $users) {
 /* Получает и фильтрует данные из формы для последующей валидации
 @return array результат фильтрации
  */
-function getRegisterFormData() {
+function getRegisterFormData()
+{
     $result = [];
     $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
@@ -210,7 +222,8 @@ function getRegisterFormData() {
 @param array $users список пользователей
 @return array|null результат валидации
  */
-function validateRegisterForm($users) {
+function validateRegisterForm($users)
+{
     $result = getRegisterFormData();
 
     $errors = [
@@ -229,12 +242,12 @@ function validateRegisterForm($users) {
 @param string $email введеный email
 @return string|null результат валидации
  */
-function validateAuthEmail($email) {
+function validateAuthEmail($email)
+{
     if (!validateRequiredField($email)) {
-        if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return null;
-        }
-        else {
+        } else {
             return 'E-mail введён некорректно';
         }
     }
@@ -244,7 +257,8 @@ function validateAuthEmail($email) {
 /* Получает и фильтрует данные из формы для последующей валидации
 @return array результат фильтрации
  */
-function getAuthFormData() {
+function getAuthFormData()
+{
     $result = [];
     $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
@@ -254,7 +268,8 @@ function getAuthFormData() {
 /** Валидация формы аутентификации на ошибки
 @return (array|null) результат валидации
  */
-function validateAuthForm() {
+function validateAuthForm()
+{
     $result = getAuthFormData();
 
     $errors = [
@@ -273,7 +288,8 @@ function validateAuthForm() {
 @param array $users массив существующих пользователей
 @return array результат проверки
 */
-function checkAuth($data, $users) {
+function checkAuth($data, $users)
+{
     $login = $data['email'];
     $password = $data['password'];
     $errors = [];
@@ -285,8 +301,7 @@ function checkAuth($data, $users) {
             if (password_verify($password, $passwordHash)) {
                 $errors['password'] = null;
                 break;
-            }
-            else {
+            } else {
                 $errors['password'] = 'Неверный пароль';
             }
         }
@@ -298,7 +313,8 @@ function checkAuth($data, $users) {
 /* Получение ID пользователя из сессии
 @return int ID пользователя
 */
-function getUserIdFromSession() {
+function getUserIdFromSession()
+{
     $userId = $_SESSION['user']['userId'] ?? null;
     return $userId;
 }
@@ -306,19 +322,22 @@ function getUserIdFromSession() {
 /* Получает и фильтрует данные из формы для последующей валидации
 @return array результат фильтрации
  */
-function getProjectFormData() {
+function getProjectFormData()
+{
     $result = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     return $result;
 }
 
-function validateProjectName($projectName) {
+function validateProjectName($projectName)
+{
     if (mb_strlen(trim($projectName)) == 0) {
         return 'Название проекта должно быть заполнено';
     }
     return null;
 }
 
-function validateProjectForm() {
+function validateProjectForm()
+{
     $result = getProjectFormData();
     $errors = validateProjectName($result);
     return $errors;

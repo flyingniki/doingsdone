@@ -14,7 +14,7 @@ if ($userId !== null) {
         foreach ($errors as $key => $value) {
             $classError[$key] = 'form__input--error';
         }
-        if(empty($errors)) {
+        if (empty($errors)) {
             addTask($conn, $post, $file, $userId);
             fileUpload($file);
             header("Location: /index.php");
@@ -29,9 +29,7 @@ if ($userId !== null) {
         'class' => $classError ?? [],
         'errors' => $errors ?? []
     ]);
-
-}
-else {
+} else {
     $content = includeTemplate('guest.php', []);
 }
 
@@ -42,10 +40,3 @@ $layout = includeTemplate('layout.php', [
 ]);
 
 print($layout);
-
-
-
-
-
-
-

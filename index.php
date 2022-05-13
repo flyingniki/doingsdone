@@ -15,13 +15,10 @@ if ($userId !== null) {
 
         if (checkExist($conn, $projectId, $userId)) {
             $tasks = getTasks($conn, $userId, $projectId, $searchString, $dateFilter);
+        } else {
+            exit('Error 404');
         }
-        else {
-            exit ('Error 404');
-        }
-    }
-
-    else {
+    } else {
         $tasks = getTasks($conn, $userId, null, $searchString, $dateFilter);
     }
 
@@ -40,10 +37,9 @@ if ($userId !== null) {
         }
     }
 
-    if(isset($showCompleted)) {
+    if (isset($showCompleted)) {
         $showCompleteTasks = $showCompleted;
-    }
-    else {
+    } else {
         $showCompleteTasks = 1;
     }
 
@@ -53,10 +49,7 @@ if ($userId !== null) {
         'tasks' => $tasks,
         'searchString' => $searchString
     ]);
-
-}
-
-else {
+} else {
     $content = includeTemplate('guest.php', []);
 }
 

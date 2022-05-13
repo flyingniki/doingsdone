@@ -4,8 +4,9 @@
 @param string $tmp_name Имя файла шаблона
 @param array $data Ассоциативный массив с данными для шаблона
 @return string Итоговый HTML
-*/
-function includeTemplate($tmpName, array $data = []) {
+ */
+function includeTemplate($tmpName, array $data = [])
+{
     $tmpName = 'templates/' . $tmpName;
     if (!is_readable($tmpName)) {
         return;
@@ -20,8 +21,9 @@ function includeTemplate($tmpName, array $data = []) {
 /** Добавляет класс к активному пункту меню
 @param array $project данные об одном проекте (из цикла по массиву проектов)
 @return string возвращает название класса либо пустую строку
-*/
-function getClassForMenuItem($project) {
+ */
+function getClassForMenuItem($project)
+{
     return (isset($_GET['project_id']) && $_GET['project_id'] === $project['id']) ?
         'main-navigation__list-item--active' :
         '';
@@ -31,8 +33,9 @@ function getClassForMenuItem($project) {
 @param string $scenario имя страницы
 @param array $params параметр запроса с идентификатором проекта
 @return string адрес ссылки
-*/
-function buildUrlForProject($scenario, $params) {
+ */
+function buildUrlForProject($scenario, $params)
+{
     $path = '/' . $scenario . '?';
     $query = http_build_query($params);
     $url = $path . $query;
@@ -43,11 +46,11 @@ function buildUrlForProject($scenario, $params) {
 @param string $scenario имя страницы
 @param array $params параметр запроса с названием фильтра
 @return string адрес ссылки
-*/
-function buildUrlForFilter($scenario, $params) {
+ */
+function buildUrlForFilter($scenario, $params)
+{
     $path = '/' . $scenario . '?';
     $query = http_build_query($params);
     $url = $path . $query;
     return $url;
 }
-
