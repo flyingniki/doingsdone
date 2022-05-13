@@ -24,7 +24,7 @@
             <label class="form__label" for="project_name">Название <sup>*</sup></label>
 
             <input class="form__input <?= $class ?? '' ?>" type="text" name="name" id="project_name"
-                value="<?= $post['name'] ?? NULL ?>" placeholder="Введите название проекта">
+                value="<?= $post['name'] ?? null ?>" placeholder="Введите название проекта">
 
             <p class="form__message"><?= $errors ?? '' ?></p>
         </div>

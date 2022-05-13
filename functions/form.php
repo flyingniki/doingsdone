@@ -62,7 +62,7 @@ function validateDate($date) {
     elseif (!isDateCorrect($date)) :
         return 'Эта дата должна быть больше или равна текущей';
     else :
-        return NULL;
+        return null;
     endif;
 }
 
@@ -75,7 +75,7 @@ function validateProject($postProjectId, $projects) {
     $res = 'Выбранный проект не существует';
     foreach ($projects as $project) {
         if ($postProjectId === $project['id']) {
-            $res = NULL;
+            $res = null;
             break;
         }
     }
@@ -90,7 +90,7 @@ function validateTaskName($taskName) {
     if (mb_strlen(trim($taskName)) == 0) {
         return 'Название задачи должно быть заполнено';
     }
-    return NULL;
+    return null;
 }
 
 /** Проверка загруженного файла по формату и размеру
@@ -111,7 +111,7 @@ function validateFile($file) {
             return 'Максимальный размер файла: 5Мб';
         }
     }
-    return NULL;
+    return null;
 }
 
 /* Получает и фильтрует данные из формы для последующей валидации
@@ -120,10 +120,10 @@ function validateFile($file) {
  */
 function getTaskFormData($file) {
     $result = [];
-    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT) ?? NULL;
-    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['file'] = $file['name'] ?? NULL;
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
+    $result['project_id'] = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT) ?? null;
+    $result['date'] = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
+    $result['file'] = $file['name'] ?? null;
     return $result;
 }
 
@@ -140,7 +140,7 @@ function validateTaskForm($file, $projects) {
     $errors = [
         'name' => validateTaskName($result['name']),
         'project_id' => validateProject($result['project_id'], $projects),
-        'date' => !empty($result['date']) ? validateDate($result['date']) : NULL,
+        'date' => !empty($result['date']) ? validateDate($result['date']) : null,
         'file' => validateFile($result['file'])
     ];
     $errors = array_filter($errors);
@@ -169,7 +169,7 @@ function validateRequiredField($field) {
     if (mb_strlen(trim($field)) == 0) {
         return 'Это поле должно быть заполнено';
     }
-    return NULL;
+    return null;
 }
 
 /** Проверка email в форме регистрации
@@ -185,7 +185,7 @@ function validateRegEmail($email, $users) {
                     return 'Пользователь с таким e-mail уже существует';
                     break;
                 }
-                return NULL;
+                return null;
             }
         }
         else {
@@ -200,9 +200,9 @@ function validateRegEmail($email, $users) {
  */
 function getRegisterFormData() {
     $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
+    $result['name'] = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     return $result;
 }
 
@@ -232,7 +232,7 @@ function validateRegisterForm($users) {
 function validateAuthEmail($email) {
     if (!validateRequiredField($email)) {
         if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return NULL;
+            return null;
         }
         else {
             return 'E-mail введён некорректно';
@@ -246,8 +246,8 @@ function validateAuthEmail($email) {
  */
 function getAuthFormData() {
     $result = [];
-    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
-    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
+    $result['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     return $result;
 }
 
@@ -283,7 +283,7 @@ function checkAuth($data, $users) {
             $errors['email'] = '';
             $passwordHash = password_hash($user['password'], PASSWORD_DEFAULT);
             if (password_verify($password, $passwordHash)) {
-                $errors['password'] = NULL;
+                $errors['password'] = null;
                 break;
             }
             else {
@@ -299,7 +299,7 @@ function checkAuth($data, $users) {
 @return int ID пользователя
 */
 function getUserIdFromSession() {
-    $userId = $_SESSION['user']['userId'] ?? NULL;
+    $userId = $_SESSION['user']['userId'] ?? null;
     return $userId;
 }
 
@@ -307,7 +307,7 @@ function getUserIdFromSession() {
 @return array результат фильтрации
  */
 function getProjectFormData() {
-    $result = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? NULL;
+    $result = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS) ?? null;
     return $result;
 }
 
@@ -315,7 +315,7 @@ function validateProjectName($projectName) {
     if (mb_strlen(trim($projectName)) == 0) {
         return 'Название проекта должно быть заполнено';
     }
-    return NULL;
+    return null;
 }
 
 function validateProjectForm() {

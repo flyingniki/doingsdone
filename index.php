@@ -3,13 +3,13 @@
 require_once('init.php');
 require_once('notify.php');
 
-if ($userId !== NULL) {
+if ($userId !== null) {
 
     $projects = getProjects($conn, $userId); // список проектов
     $userName = $_SESSION['user']['userName'];
-    $projectId = isset($_GET['project_id']) ? filterString($_GET['project_id']) : NULL;
-    $searchString = isset($_GET['search']) ? filterString($_GET['search']) : NULL;
-    $dateFilter = isset($_GET['filter']) ? filterString($_GET['filter']) : NULL;
+    $projectId = isset($_GET['project_id']) ? filterString($_GET['project_id']) : null;
+    $searchString = isset($_GET['search']) ? filterString($_GET['search']) : null;
+    $dateFilter = isset($_GET['filter']) ? filterString($_GET['filter']) : null;
 
     if (isset($projectId)) {
 
@@ -22,7 +22,7 @@ if ($userId !== NULL) {
     }
 
     else {
-        $tasks = getTasks($conn, $userId, NULL, $searchString, $dateFilter);
+        $tasks = getTasks($conn, $userId, null, $searchString, $dateFilter);
     }
 
     $taskId = filter_input(INPUT_GET, 'task_id', FILTER_VALIDATE_INT);

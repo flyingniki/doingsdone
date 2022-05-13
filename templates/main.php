@@ -29,7 +29,7 @@
 
     <div class="tasks-controls">
         <nav class="tasks-switch">
-            <a href="<?= buildUrlForFilter('index.php', ['filter' => NULL]) ?>" class="tasks-switch__item <?= !isset($_GET['filter']) ? 'tasks-switch__item--active' : '' ?>">Все задачи</a>
+            <a href="<?= buildUrlForFilter('index.php', ['filter' => null]) ?>" class="tasks-switch__item <?= !isset($_GET['filter']) ? 'tasks-switch__item--active' : '' ?>">Все задачи</a>
             <a href="<?= buildUrlForFilter('index.php', ['filter' => 'today']) ?>" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'today' ? 'tasks-switch__item--active' : '' ?>">Повестка дня</a>
             <a href="<?= buildUrlForFilter('index.php', ['filter' => 'tomorrow']) ?>" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'tomorrow' ? 'tasks-switch__item--active' : '' ?>">Завтра</a>
             <a href="<?= buildUrlForFilter('index.php', ['filter' => 'overdue']) ?>" class="tasks-switch__item <?= isset($_GET['filter']) && $_GET['filter'] === 'overdue' ? 'tasks-switch__item--active' : '' ?>">Просроченные</a>
@@ -57,7 +57,7 @@
                     endif;
 
                     if ($task['status'] === 0):
-                        if (hourRemain($task['date_final']) && $task['date_final'] !== NULL): ?>
+                        if (hourRemain($task['date_final']) && $task['date_final'] !== null): ?>
 
                             <tr class="tasks__item task task--important">
                                 <td class="task__select">

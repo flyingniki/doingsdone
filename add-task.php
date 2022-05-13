@@ -2,7 +2,7 @@
 
 require_once('init.php');
 
-if ($userId !== NULL) {
+if ($userId !== null) {
 
     $projects = getProjects($conn, $userId); // список проектов
     $userName = $_SESSION['user']['userName'];
@@ -36,7 +36,7 @@ else {
 }
 
 $layout = includeTemplate('layout.php', [
-    'userName' => $userName ?? NULL,
+    'userName' => $userName ?? null,
     'content' => $content,
     'title' => 'Добавить задачу'
 ]);

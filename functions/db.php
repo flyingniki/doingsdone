@@ -49,12 +49,12 @@ function getProjects(mysqli $conn, int $userId) {
 @param null|string $searchString строка поиска
 @return array ответ запроса в виде двумерного массива
 */
-function getTasks(mysqli $conn, int $userId, ?int $project_id = NULL, ?string $searchString = NULL, ?string $dateFilter = NULL): array {
+function getTasks(mysqli $conn, int $userId, ?int $project_id = null, ?string $searchString = null, ?string $dateFilter = null): array {
     $sql = "SELECT * FROM tasks t WHERE t.user_id = {$userId}";
-    if ($project_id !== NULL) {
+    if ($project_id !== null) {
         $sql .= " AND t.project_id = {$project_id}";
     }
-    if ($searchString !== NULL && $searchString !== '') {
+    if ($searchString !== null && $searchString !== '') {
         $sql .= " AND MATCH (t.title) AGAINST ('{$searchString}')";
     }
     if ($dateFilter === 'today') {
@@ -211,7 +211,7 @@ function checkExistProjectName($conn, $projectName, $userId) {
     if (dbQuery($conn, $sql)) :
         return 'Проект с таким именем уже существует';
     else :
-        return NULL;
+        return null;
     endif;
 }
 

@@ -12,7 +12,7 @@
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
 
             <input class="form__input <?= $class['email'] ?? '' ?>" type="text" name="email" id="email"
-                value="<?= $post['email'] ?? NULL ?>" placeholder="Введите e-mail">
+                value="<?= $post['email'] ?? null ?>" placeholder="Введите e-mail">
 
             <p class="form__message"><?= $errors['email'] ?? '' ?></p>
         </div>
@@ -21,7 +21,7 @@
             <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
             <input class="form__input <?= $class['password'] ?? '' ?>" type="password" name="password" id="password"
-                value="<?= $post['password'] ?? NULL ?>" placeholder="Введите пароль">
+                value="<?= $post['password'] ?? null ?>" placeholder="Введите пароль">
 
             <p class="form__message"><?= $errors['password'] ?? '' ?></p>
         </div>
@@ -30,7 +30,7 @@
             <label class="form__label" for="name">Имя <sup>*</sup></label>
 
             <input class="form__input <?= $class['name'] ?? '' ?>" type="text" name="name" id="name"
-                value="<?= $post['name'] ?? NULL ?>" placeholder="Введите имя">
+                value="<?= $post['name'] ?? null ?>" placeholder="Введите имя">
 
             <p class="form__message"><?= $errors['name'] ?? '' ?></p>
         </div>
