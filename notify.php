@@ -7,40 +7,38 @@ use Symfony\Component\Mime\Email;
 require_once('vendor/autoload.php');
 require_once('init.php');
 
-$tasks = getUncompletedTasks($conn);
-$usersTasks = [];
+$uncompletedTasks = getUncompletedTasks($conn);
 
-foreach ($tasks as $task) {
-    $usersTasks[$task['email']][] = [
-        'name' => $task['name'],
-        'title' => $task['title'],
-        'date_final' => $task['date_final']
-    ];
+$usersId = [];
+$usersEmail = [];
+$usersName = [];
+
+foreach ($uncompletedTasks as $uncompletedTask) {
+    if (!in_array($uncompletedTask['user_id'], $usersId)) {
+        $usersId[] = $uncompletedTask['user_id'];
+        $usersEmail[$uncompletedTask['user_id']] = $uncompletedTask['email'];
+        $usersName[$uncompletedTask['user_id']] = $uncompletedTask['name'];
+        $messageText[$uncompletedTask['user_id']] = '«' . $uncompletedTask['title'] . '» на ' . date('d-m-Y', strtotime($uncompletedTask['date_final']));
+    } else {
+        $messageText[$uncompletedTask['user_id']] .= ', «' . $uncompletedTask['title'] . '» на ' . date('d-m-Y', strtotime($uncompletedTask['date_final']));
+    }
 }
-
+/*
 echo '<pre>';
-print_r($usersTasks);
+print_r($usersEmail);
+print_r($usersName);
+print_r($messageText);
 echo '</pre>';
-
-// Конфигурация траспорта
+*/
 $dsn = 'smtp://flying_niki@mail.ru:password@smtp.mail.ru:465?encryption=tls&auth_mode=login';
 $transport = Transport::fromDsn($dsn);
 
-foreach ($usersTasks as $userEmail => $userTask) {
-    $taskTitle = '';
-    foreach ($userTask as $taskInfo) {
-        $taskUserName = $taskInfo['name'];
-        $taskTitle .= '«' . $taskInfo['title'] . '» ';
-        $taskDateFinal = $taskInfo['date_final'];
-    }
-
-    // Формирование сообщения
+foreach ($usersId as $Id) {
     $message = new Email();
-    $message->to($userEmail);
-    $message->from("flying_niki@mail.ru");
-    $message->subject("Уведомление от сервиса «Дела в порядке»");
-    $message->text("Уважаемый, " . $taskUserName . ". У вас запланирована задача " . $taskTitle . "на " . date('d-m-Y', strtotime($taskDateFinal)));
-    // Отправка сообщения
+    $message->to($usersEmail[$Id]);
+    $message->from('mail@giftube.academy');
+    $message->subject('Уведомление от сервиса «Дела в порядке»');
+    $message->text('Уважаемый, ' . $usersName[$Id] . '. У вас запланирована задача ' . $messageText[$Id]);
     $mailer = new Mailer($transport);
     /*
     echo '<pre>';
