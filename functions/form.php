@@ -1,6 +1,6 @@
 <?php
 
-/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+/** Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
 @param string $data
 @return string результат
 */
@@ -9,7 +9,7 @@ function filterString($data)
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
-/* Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
+/** Приводит данные в безопасное представление (удаляет пробелы и очищает от html-тегов)
 @param array $data
 @return array результат
 */
@@ -121,7 +121,7 @@ function validateFile($file)
     return null;
 }
 
-/* Получает и фильтрует данные из формы для последующей валидации
+/** Получает и фильтрует данные из формы для последующей валидации
 @param array $file прикрепленный файл
 @return array результат фильтрации
  */
@@ -206,7 +206,7 @@ function validateRegEmail($email, $users)
     return validateRequiredField($email);
 }
 
-/* Получает и фильтрует данные из формы для последующей валидации
+/** Получает и фильтрует данные из формы для последующей валидации
 @return array результат фильтрации
  */
 function getRegisterFormData()
@@ -254,7 +254,7 @@ function validateAuthEmail($email)
     return validateRequiredField($email);
 }
 
-/* Получает и фильтрует данные из формы для последующей валидации
+/** Получает и фильтрует данные из формы для последующей валидации
 @return array результат фильтрации
  */
 function getAuthFormData()
@@ -283,7 +283,7 @@ function validateAuthForm()
     return $errors;
 }
 
-/* Проверка авторизации
+/** Проверка авторизации
 @param array $data данные из формы авторизации
 @param array $users массив существующих пользователей
 @return array результат проверки
@@ -310,7 +310,7 @@ function checkAuth($data, $users)
     return $errors;
 }
 
-/* Получение ID пользователя из сессии
+/** Получение ID пользователя из сессии
 @return int ID пользователя
 */
 function getUserIdFromSession()
@@ -319,7 +319,7 @@ function getUserIdFromSession()
     return $userId;
 }
 
-/* Получает и фильтрует данные из формы для последующей валидации
+/** Получает и фильтрует данные из формы для последующей валидации
 @return array результат фильтрации
  */
 function getProjectFormData()
@@ -328,6 +328,10 @@ function getProjectFormData()
     return $result;
 }
 
+/** Проверяет, что обязательное поле "название проекта" заполнено
+@param string $projectName название задачи
+@return string|null результат проверки
+ */
 function validateProjectName($projectName)
 {
     if (mb_strlen(trim($projectName)) == 0) {
@@ -336,6 +340,9 @@ function validateProjectName($projectName)
     return null;
 }
 
+/** Валидация формы добавления проекта на ошибки
+ * @return string|null результат валидации
+*/
 function validateProjectForm()
 {
     $result = getProjectFormData();
